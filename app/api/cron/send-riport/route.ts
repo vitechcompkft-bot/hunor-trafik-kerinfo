@@ -23,6 +23,8 @@ export async function GET(req: NextRequest) {
   }
   const cfg = await loadConfig();
   if (!cfg.aktiv) return NextResponse.json({ skipped: "inactive" });
+  const utcOra = new Date().getUTCHours();
+  if (cfg.ora !== utcOra) return NextResponse.json({ skipped: `not the hour (cfg=${cfg.ora}, now=${utcOra})` });
 
   const jsonPath = path.join(process.cwd(), "public", "data", "trafik.json");
   const raw = await fs.readFile(jsonPath, "utf8");

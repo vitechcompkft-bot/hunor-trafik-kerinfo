@@ -49,7 +49,7 @@ export default function AdminPage() {
   async function testSend() {
     if (!cfg?.emails.length) { setErr("Nincs email-cím beállítva"); return; }
     setBusy(true); setMsg(null); setErr(null);
-    const r = await fetch("/api/admin/test-send", { method: "POST", headers: { "content-type": "application/json", "x-admin-pin": pin }, body: JSON.stringify({}) });
+    const r = await fetch("/api/admin/test-send", { method: "POST", headers: { "content-type": "application/json", "x-admin-pin": pin }, body: JSON.stringify({ emails: cfg.emails }) });
     setBusy(false);
     const j = await r.json();
     if (r.ok && j.ok) setMsg(`Teszt-küldés sikerült — ${j.message}`); else setErr(j.message || j.error || "Hiba");
@@ -106,8 +106,15 @@ export default function AdminPage() {
             <input type="checkbox" checked={cfg?.aktiv || false} onChange={e => setCfg(c => c && { ...c, aktiv: e.target.checked })} className="h-4 w-4 accent-brand" />
             Automatikus napi email-küldés bekapcsolva
           </label>
+          <div className="flex items-center gap-3">
+            <label className="text-sm text-white/85">Küldés időpontja:</label>
+            <select value={cfg?.ora ?? 4} onChange={e => setCfg(c => c && { ...c, ora: Number(e.target.value) })} className="v-input">
+              <option value={4} className="bg-slate-800">Reggel 6:00 (magyar idő)</option>
+              <option value={6} className="bg-slate-800">Reggel 8:00 (magyar idő)</option>
+            </select>
+          </div>
           <p className="text-xs text-white/50">
-            A rendszer minden nap <b>reggel 6:00 (magyar idő)</b> körül küld egy emailt a beállított címekre az előző napi trafik-adatokkal (XLSX-melléklet).
+            A rendszer minden nap a beállított időpontban küld egy emailt a beállított címekre az előző napi trafik-adatokkal (XLSX-melléklet). További időpontok Vercel Pro csomaggal.
           </p>
         </div>
 
