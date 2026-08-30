@@ -4,6 +4,10 @@ import * as XLSX from "xlsx";
 import type { TrafikData, NapiSor } from "@/lib/types";
 
 const SITE_URL = "https://trafik.hunorcoop.hu";
+function siteLink(): string {
+  const t = process.env.EMAIL_LINK_TOKEN;
+  return t ? `${SITE_URL}/?token=${encodeURIComponent(t)}` : SITE_URL;
+}
 
 export async function generateXlsxAttachment(data: TrafikData, datum: string): Promise<Buffer> {
   const sorok: NapiSor[] = data.napi[datum] || [];
@@ -92,12 +96,12 @@ function buildHtml(data: TrafikData, datum: string) {
           </table>
 
           <div style="margin-top:24px;text-align:center;">
-            <a href="${SITE_URL}" style="display:inline-block;background:#1A73E8;color:#ffffff;text-decoration:none;font-weight:600;font-size:14px;padding:12px 24px;border-radius:8px;">Teljes dashboard megnyitása →</a>
+            <a href="${siteLink()}" style="display:inline-block;background:#1A73E8;color:#ffffff;text-decoration:none;font-weight:600;font-size:14px;padding:12px 24px;border-radius:8px;">Teljes dashboard megnyitása →</a>
           </div>
 
           <p style="margin:24px 0 0 0;font-size:12px;line-height:1.5;color:#8592a6;text-align:center;">
             Ez egy automatikus üzenet, kérjük ne válaszoljon rá.<br>
-            <a href="${SITE_URL}" style="color:#1A73E8;text-decoration:none;">${SITE_URL}</a>
+            <a href="${siteLink()}" style="color:#1A73E8;text-decoration:none;">${SITE_URL}</a>
           </p>
         </td></tr>
         <tr><td style="padding:16px 28px;background:#f4f6fb;text-align:center;font-size:11px;color:#8592a6;">

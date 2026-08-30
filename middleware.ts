@@ -2,14 +2,27 @@
 import { NextResponse, type NextRequest } from "next/server";
 
 export function middleware(req: NextRequest) {
-  const { pathname } = req.nextUrl;
+  const { pathname, searchParams } = req.nextUrl;
 
-  // Ha a látogató cookie-jában érvényes PIN van, mehet tovább
+  // 1) URL-ben ?token=xxx (email-linkből) → cookie set + tiszta URL-re redirect
+  const emailToken = process.env.EMAIL_LINK_TOKEN;
+  const suppliedToken = searchParams.get("token");
+  if (emailToken && suppliedToken && suppliedToken === emailToken) {
+    const cleanUrl = req.nextUrl.clone();
+    cleanUrl.searchParams.delete("token");
+    const res = NextResponse.redirect(cleanUrl);
+    res.cookies.set("site-auth", process.env.SITE_PIN || process.env.ADMIN_PIN || "", {
+      httpOnly: true, secure: true, sameSite: "lax", path: "/", maxAge: 60 * 60 * 24 * 30,
+    });
+    return res;
+  }
+
+  // 2) Cookie-alapú belépés
   const auth = req.cookies.get("site-auth")?.value;
   const sitePin = process.env.SITE_PIN || process.env.ADMIN_PIN || "";
   if (sitePin && (auth === sitePin || auth === process.env.ADMIN_PIN)) return NextResponse.next();
 
-  // Nincs érvényes cookie — redirect a /login oldalra (a kért URL-t megőrizve)
+  // 3) Nincs jó auth → /login (a kért URL-t megőrizve)
   const url = req.nextUrl.clone();
   url.pathname = "/login";
   url.search = `?from=${encodeURIComponent(pathname)}`;
