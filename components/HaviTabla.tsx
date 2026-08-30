@@ -15,6 +15,7 @@ const HAVI_OSZLOPOK: ExportColumn[] = [
   { header: "ÁrRésNe", key: "arres", format: "ft" },
   { header: "ÁrRés%", key: "arres_szint", format: "pct" },
   { header: "BlokkDb", key: "vevoszam", format: "num" },
+  { header: "BlokkDb Bázis", key: "vevoszam_bazis", format: "num" },
   { header: "ZáróBr", key: "keszlet", format: "ft" },
   { header: "Leértössz", key: "leertekeles", format: "ft" },
   { header: "LeírásBr", key: "leiras_br", format: "ft" },
@@ -65,15 +66,18 @@ export function HaviTabla({ sorok, honap = "" }: { sorok: HaviSor[]; honap?: str
   const cim = honap ? `Havi összesítő — ${honap}` : "Havi összesítő";
   const fname = honap ? `trafik-havi-${honap}` : "trafik-havi";
 
-  // Az exportált sorokba írjuk hozzá az Index%-ot is
+  // Az exportált sorokba írjuk hozzá az Index%-ot (forgalom + vevőszám)
   const exportSorok = sorbaRendezett.map(r => ({
     ...r,
     _index: r.forgalom_bazis > 0 ? (r.forgalom / r.forgalom_bazis * 100) : 0,
+    _vidx: r.vevoszam_bazis > 0 ? (r.vevoszam / r.vevoszam_bazis * 100) : 0,
   }));
   const exportOszlopok: ExportColumn[] = [
     ...HAVI_OSZLOPOK.slice(0, 3),  // Trafik, ÁrbevBr, Bázis
     { header: "Index %", key: "_index", format: "pct" },
-    ...HAVI_OSZLOPOK.slice(3),
+    ...HAVI_OSZLOPOK.slice(3, 7),  // ÁrRésNe, ÁrRés%, BlokkDb, BlokkDb Bázis
+    { header: "Bl. Idx %", key: "_vidx", format: "pct" },
+    ...HAVI_OSZLOPOK.slice(7),
   ];
 
   return (
@@ -96,6 +100,8 @@ export function HaviTabla({ sorok, honap = "" }: { sorok: HaviSor[]; honap?: str
             {fejl("arres", "ÁrRésNe")}
             {fejl("arres_szint", "ÁrRés%")}
             {fejl("vevoszam", "BlokkDb")}
+            {fejl("vevoszam_bazis", "Bl. Bázis")}
+            <th className="px-2 py-2 text-right whitespace-nowrap">Bl. Idx %</th>
             {fejl("keszlet", "ZáróBr")}
             {fejl("leertekeles", "Leértössz")}
             {fejl("leiras_br", "LeírásBr")}
@@ -117,6 +123,13 @@ export function HaviTabla({ sorok, honap = "" }: { sorok: HaviSor[]; honap?: str
               <td className="px-2 py-1.5 text-right tabular-nums whitespace-nowrap">{ft(r.arres)}</td>
               <td className="px-2 py-1.5 text-right tabular-nums whitespace-nowrap">{r.arres_szint ? pct(r.arres_szint) : "—"}</td>
               <td className="px-2 py-1.5 text-right tabular-nums whitespace-nowrap">{num(r.vevoszam)}</td>
+              <td className="px-2 py-1.5 text-right tabular-nums text-white/50 whitespace-nowrap">{r.vevoszam_bazis > 0 ? num(r.vevoszam_bazis) : "—"}</td>
+              {(() => {
+                const bidx = r.vevoszam_bazis > 0 ? (r.vevoszam / r.vevoszam_bazis * 100) : 0;
+                const bgyanus = bidx > 200 || (bidx > 0 && bidx < 50);
+                const bcls = bgyanus ? "text-amber-400" : bidx >= 100 ? "text-emerald-400" : bidx > 0 ? "text-red-400" : "text-white/40";
+                return <td className={`px-2 py-1.5 text-right tabular-nums font-semibold whitespace-nowrap ${bcls}`}>{bidx > 0 ? (bgyanus ? "⚠ " : "") + pct(bidx) : "—"}</td>;
+              })()}
               <td className="px-2 py-1.5 text-right tabular-nums whitespace-nowrap text-white/60">{ft(r.keszlet)}</td>
               <td className="px-2 py-1.5 text-right tabular-nums whitespace-nowrap">{ft(r.leertekeles)}</td>
               <td className="px-2 py-1.5 text-right tabular-nums whitespace-nowrap">{ft(r.leiras_br)}</td>
@@ -139,6 +152,15 @@ export function HaviTabla({ sorok, honap = "" }: { sorok: HaviSor[]; honap?: str
             <td className="px-2 py-2 text-right tabular-nums whitespace-nowrap">{ft(osszArres)}</td>
             <td className="px-2 py-2 text-right tabular-nums whitespace-nowrap">{pct(atlagArresSz)}</td>
             <td className="px-2 py-2 text-right tabular-nums whitespace-nowrap">{num(osszVev)}</td>
+            {(() => {
+              const osszVevB = sorok.reduce((s, r) => s + (r.vevoszam_bazis || 0), 0);
+              const bidx = osszVevB > 0 ? (osszVev / osszVevB * 100) : 0;
+              const bcls = bidx >= 100 ? "text-emerald-400" : bidx > 0 ? "text-red-400" : "text-white/40";
+              return <>
+                <td className="px-2 py-2 text-right tabular-nums whitespace-nowrap text-white/70">{osszVevB > 0 ? num(osszVevB) : "—"}</td>
+                <td className={`px-2 py-2 text-right tabular-nums whitespace-nowrap ${bcls}`}>{bidx > 0 ? pct(bidx) : "—"}</td>
+              </>;
+            })()}
             <td className="px-2 py-2 text-right tabular-nums whitespace-nowrap">{ft(osszKesz)}</td>
             <td className="px-2 py-2 text-right tabular-nums whitespace-nowrap">{ft(osszLeert)}</td>
             <td className="px-2 py-2 text-right tabular-nums whitespace-nowrap">—</td>

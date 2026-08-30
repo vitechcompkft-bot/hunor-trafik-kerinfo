@@ -69,11 +69,11 @@ for (const nap of napok) {
 const havi = {};
 const honapok = db.prepare(`SELECT DISTINCT ev, honap FROM havi_trafik_bolt ORDER BY ev DESC, honap DESC LIMIT 24`).all();
 
-// Előző év azonos hó adata a bázis-oszlophoz
-function getForgBazis(ev, ho) {
+// Előző év azonos hó adata a bázis-oszlopokhoz (forgalom + vevőszám)
+function getBazis(ev, ho) {
   const bazisEv = ev - 1;
-  const rows = db.prepare(`SELECT kod, forgalom FROM havi_trafik_bolt WHERE ev=? AND honap=?`).all(bazisEv, ho);
-  return new Map(rows.map(r => [r.kod, r.forgalom || 0]));
+  const rows = db.prepare(`SELECT kod, forgalom, vevoszam FROM havi_trafik_bolt WHERE ev=? AND honap=?`).all(bazisEv, ho);
+  return new Map(rows.map(r => [r.kod, { forgalom: r.forgalom || 0, vevoszam: r.vevoszam || 0 }]));
 }
 
 for (const h of honapok) {
@@ -91,16 +91,18 @@ for (const h of honapok) {
   `).all(honapPrefix + '%');
   const reszMap = new Map(reszRows.map(r => [r.bolt, { le: r.le || 0, li: r.li || 0, em: r.em || 0 }]));
 
-  const bazisMap = getForgBazis(h.ev, h.honap);
+  const bazisMap = getBazis(h.ev, h.honap);
 
   havi[key] = rows.map(r => {
     const resz = reszMap.get(r.kod) || { le: 0, li: 0, em: 0 };
+    const b = bazisMap.get(r.kod);
     return {
       bolt: r.kod,
       nev: TRAFIK_NEVEK[r.kod] || r.kod,
       forgalom: r.forgalom || 0,
-      forgalom_bazis: bazisMap.get(r.kod) || 0,
+      forgalom_bazis: b?.forgalom || 0,
       vevoszam: r.vevoszam || 0,
+      vevoszam_bazis: b?.vevoszam || 0,
       keszlet: r.keszlet_fogy || 0,
       arres: r.arres || 0,
       arres_szint: r.arres_szint || 0,
@@ -121,7 +123,7 @@ for (const h of honapok) {
     if (r119 && (r119.dohany_forgalom > 0 || r119.dohany_vevoszam > 0)) {
       const arres_sz = r119.dohany_forgalom > 0 ? (r119.dohany_arres / r119.dohany_forgalom * 127) : 0;
       const fdb2 = new Database(FORG_DB_PATH, { readonly: true });
-      const b119 = fdb2.prepare(`SELECT dohany_forgalom FROM havi_bolt WHERE kod='119' AND ev=? AND honap=?`).get(h.ev - 1, h.honap);
+      const b119 = fdb2.prepare(`SELECT dohany_forgalom, dohany_vevoszam FROM havi_bolt WHERE kod='119' AND ev=? AND honap=?`).get(h.ev - 1, h.honap);
       fdb2.close();
       havi[key].push({
         bolt: '119',
@@ -129,6 +131,7 @@ for (const h of honapok) {
         forgalom: r119.dohany_forgalom || 0,
         forgalom_bazis: b119?.dohany_forgalom || 0,
         vevoszam: r119.dohany_vevoszam || 0,
+        vevoszam_bazis: b119?.dohany_vevoszam || 0,
         keszlet: r119.dohany_keszlet || 0,
         arres: r119.dohany_arres || 0,
         arres_szint: arres_sz,
