@@ -111,38 +111,38 @@ export function HaviTabla({ sorok, honap = "" }: { sorok: HaviSor[]; honap?: str
             return (
             <tr key={r.bolt}>
               <td className="px-2 py-1.5 font-medium whitespace-nowrap">{r.nev}</td>
-              <td className="px-2 py-1.5 text-right tabular-nums">{ft(r.forgalom)}</td>
-              <td className="px-2 py-1.5 text-right tabular-nums text-white/50" title={gyanus ? "Gyanús bázis-adat (részleges)" : ""}>{r.forgalom_bazis > 0 ? ft(r.forgalom_bazis) : "—"}</td>
-              <td className={`px-2 py-1.5 text-right tabular-nums font-semibold ${idxCls}`} title={gyanus ? "Bázis-adat gyanús" : ""}>{idx > 0 ? (gyanus ? "⚠ " : "") + pct(idx) : "—"}</td>
-              <td className="px-2 py-1.5 text-right tabular-nums">{ft(r.arres)}</td>
-              <td className="px-2 py-1.5 text-right tabular-nums">{r.arres_szint ? pct(r.arres_szint) : "—"}</td>
-              <td className="px-2 py-1.5 text-right tabular-nums">{num(r.vevoszam)}</td>
-              <td className="px-2 py-1.5 text-right tabular-nums text-white/60">{ft(r.keszlet)}</td>
-              <td className="px-2 py-1.5 text-right tabular-nums">{ft(r.leertekeles)}</td>
-              <td className="px-2 py-1.5 text-right tabular-nums">{ft(r.leiras_br)}</td>
-              <td className="px-2 py-1.5 text-right tabular-nums">{ft(r.emozg_br)}</td>
+              <td className="px-2 py-1.5 text-right tabular-nums whitespace-nowrap">{ft(r.forgalom)}</td>
+              <td className="px-2 py-1.5 text-right tabular-nums whitespace-nowrap text-white/50" title={gyanus ? "Gyanús bázis-adat (részleges)" : ""}>{r.forgalom_bazis > 0 ? ft(r.forgalom_bazis) : "—"}</td>
+              <td className={`px-2 py-1.5 text-right tabular-nums whitespace-nowrap font-semibold ${idxCls}`} title={gyanus ? "Bázis-adat gyanús" : ""}>{idx > 0 ? (gyanus ? "⚠ " : "") + pct(idx) : "—"}</td>
+              <td className="px-2 py-1.5 text-right tabular-nums whitespace-nowrap">{ft(r.arres)}</td>
+              <td className="px-2 py-1.5 text-right tabular-nums whitespace-nowrap">{r.arres_szint ? pct(r.arres_szint) : "—"}</td>
+              <td className="px-2 py-1.5 text-right tabular-nums whitespace-nowrap">{num(r.vevoszam)}</td>
+              <td className="px-2 py-1.5 text-right tabular-nums whitespace-nowrap text-white/60">{ft(r.keszlet)}</td>
+              <td className="px-2 py-1.5 text-right tabular-nums whitespace-nowrap">{ft(r.leertekeles)}</td>
+              <td className="px-2 py-1.5 text-right tabular-nums whitespace-nowrap">{ft(r.leiras_br)}</td>
+              <td className="px-2 py-1.5 text-right tabular-nums whitespace-nowrap">{ft(r.emozg_br)}</td>
             </tr>
             );
           })}
           <tr className="row-osszes">
             <td className="px-2 py-2">Összesen</td>
-            <td className="px-2 py-2 text-right tabular-nums">{ft(osszForg)}</td>
+            <td className="px-2 py-2 text-right tabular-nums whitespace-nowrap">{ft(osszForg)}</td>
             {(() => {
               const osszBazis = sorok.reduce((s,r) => s + (r.forgalom_bazis || 0), 0);
               const osszIdx = osszBazis > 0 ? (osszForg / osszBazis * 100) : 0;
               const cls = osszIdx >= 100 ? "text-emerald-400" : osszIdx > 0 ? "text-red-400" : "text-white/40";
               return <>
-                <td className="px-2 py-2 text-right tabular-nums text-white/70">{osszBazis > 0 ? ft(osszBazis) : "—"}</td>
-                <td className={`px-2 py-2 text-right tabular-nums ${cls}`}>{osszIdx > 0 ? pct(osszIdx) : "—"}</td>
+                <td className="px-2 py-2 text-right tabular-nums whitespace-nowrap text-white/70">{osszBazis > 0 ? ft(osszBazis) : "—"}</td>
+                <td className={`px-2 py-2 text-right tabular-nums whitespace-nowrap ${cls}`}>{osszIdx > 0 ? pct(osszIdx) : "—"}</td>
               </>;
             })()}
-            <td className="px-2 py-2 text-right tabular-nums">{ft(osszArres)}</td>
-            <td className="px-2 py-2 text-right tabular-nums">{pct(atlagArresSz)}</td>
-            <td className="px-2 py-2 text-right tabular-nums">{num(osszVev)}</td>
-            <td className="px-2 py-2 text-right tabular-nums">{ft(osszKesz)}</td>
-            <td className="px-2 py-2 text-right tabular-nums">{ft(osszLeert)}</td>
-            <td className="px-2 py-2 text-right tabular-nums">—</td>
-            <td className="px-2 py-2 text-right tabular-nums">{ft(osszEmozg)}</td>
+            <td className="px-2 py-2 text-right tabular-nums whitespace-nowrap">{ft(osszArres)}</td>
+            <td className="px-2 py-2 text-right tabular-nums whitespace-nowrap">{pct(atlagArresSz)}</td>
+            <td className="px-2 py-2 text-right tabular-nums whitespace-nowrap">{num(osszVev)}</td>
+            <td className="px-2 py-2 text-right tabular-nums whitespace-nowrap">{ft(osszKesz)}</td>
+            <td className="px-2 py-2 text-right tabular-nums whitespace-nowrap">{ft(osszLeert)}</td>
+            <td className="px-2 py-2 text-right tabular-nums whitespace-nowrap">—</td>
+            <td className="px-2 py-2 text-right tabular-nums whitespace-nowrap">{ft(osszEmozg)}</td>
           </tr>
         </tbody>
       </table>
