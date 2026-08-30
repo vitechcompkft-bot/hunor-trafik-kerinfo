@@ -68,9 +68,9 @@ export default function Home() {
               className={"v-toggle-btn inline-flex items-center gap-1.5 " + (nezet === "napi" ? "active" : "")}>
               <Clock className="h-4 w-4" />Napi
             </button>
-            <button disabled title="Havi nézet: bázis-adat feltöltése után lesz elérhető"
-              className="v-toggle-btn inline-flex items-center gap-1.5 border-l border-white/10 opacity-40 cursor-not-allowed">
-              <Calendar className="h-4 w-4" />Havi <span className="text-[10px] ml-1">(hamarosan)</span>
+            <button onClick={() => setNezet("havi")}
+              className={"v-toggle-btn inline-flex items-center gap-1.5 border-l border-white/10 " + (nezet === "havi" ? "active" : "")}>
+              <Calendar className="h-4 w-4" />Havi
             </button>
           </div>
 
