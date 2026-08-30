@@ -13,8 +13,12 @@ function checkPin(req: NextRequest): boolean {
 
 export async function GET(req: NextRequest) {
   if (!checkPin(req)) return NextResponse.json({ error: "Hibás PIN" }, { status: 401 });
-  const cfg = await loadConfig();
-  return NextResponse.json(cfg);
+  try {
+    const cfg = await loadConfig();
+    return NextResponse.json(cfg);
+  } catch (e) {
+    return NextResponse.json({ error: "Redis-olvasás hiba: " + (e as Error).message }, { status: 500 });
+  }
 }
 
 export async function PUT(req: NextRequest) {
@@ -24,9 +28,13 @@ export async function PUT(req: NextRequest) {
     emails: Array.isArray(body.emails)
       ? body.emails.map((e: unknown) => String(e).trim()).filter((e: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e))
       : [],
-    ora: Math.max(0, Math.min(23, Number(body.ora) || 6)),
+    ora: Math.max(0, Math.min(23, Number(body.ora) || 4)),
     aktiv: Boolean(body.aktiv),
   };
-  await saveConfig(cfg);
-  return NextResponse.json({ ok: true, config: cfg });
+  try {
+    await saveConfig(cfg);
+    return NextResponse.json({ ok: true, config: cfg });
+  } catch (e) {
+    return NextResponse.json({ ok: false, error: "Redis-mentés hiba: " + (e as Error).message }, { status: 500 });
+  }
 }

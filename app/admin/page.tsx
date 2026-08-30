@@ -1,6 +1,6 @@
 "use client";
-import { useEffect, useState } from "react";
-import { Lock, Mail, Save, Send, ArrowLeft, X, Plus } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { Lock, Mail, Send, ArrowLeft, X, Plus, CheckCircle2 } from "lucide-react";
 
 type Cfg = { emails: string[]; ora: number; aktiv: boolean };
 
@@ -10,8 +10,10 @@ export default function AdminPage() {
   const [cfg, setCfg] = useState<Cfg | null>(null);
   const [newEmail, setNewEmail] = useState("");
   const [busy, setBusy] = useState(false);
+  const [savedAt, setSavedAt] = useState<number>(0);
   const [msg, setMsg] = useState<string | null>(null);
   const [err, setErr] = useState<string | null>(null);
+  const lastSavedRef = useRef<string>("");
 
   useEffect(() => { const saved = sessionStorage.getItem("admin-pin"); if (saved) { setPin(saved); tryLogin(saved); } }, []);
 
@@ -19,7 +21,9 @@ export default function AdminPage() {
     setErr(null);
     const r = await fetch("/api/admin/config", { headers: { "x-admin-pin": pinTry } });
     if (r.ok) {
-      setCfg(await r.json());
+      const data: Cfg = await r.json();
+      setCfg(data);
+      lastSavedRef.current = JSON.stringify(data);
       setLogged(true);
       sessionStorage.setItem("admin-pin", pinTry);
     } else {
@@ -27,6 +31,29 @@ export default function AdminPage() {
       sessionStorage.removeItem("admin-pin");
     }
   }
+
+  // Auto-save: minden változás után 400ms múlva menti (debounced)
+  useEffect(() => {
+    if (!cfg) return;
+    const cur = JSON.stringify(cfg);
+    if (cur === lastSavedRef.current) return;
+    const t = setTimeout(async () => {
+      const r = await fetch("/api/admin/config", {
+        method: "PUT",
+        headers: { "content-type": "application/json", "x-admin-pin": pin },
+        body: cur,
+      });
+      if (r.ok) {
+        lastSavedRef.current = cur;
+        setSavedAt(Date.now());
+        setErr(null);
+      } else {
+        const j = await r.json().catch(() => ({}));
+        setErr(j.error || "Nem sikerült elmenteni");
+      }
+    }, 400);
+    return () => clearTimeout(t);
+  }, [cfg, pin]);
 
   function addEmail() {
     const e = newEmail.trim();
@@ -37,19 +64,14 @@ export default function AdminPage() {
   }
   function removeEmail(e: string) { setCfg(c => c && { ...c, emails: c.emails.filter(x => x !== e) }); }
 
-  async function save() {
-    if (!cfg) return;
-    setBusy(true); setMsg(null); setErr(null);
-    const r = await fetch("/api/admin/config", { method: "PUT", headers: { "content-type": "application/json", "x-admin-pin": pin }, body: JSON.stringify(cfg) });
-    setBusy(false);
-    const j = await r.json();
-    if (r.ok) setMsg("Beállítások elmentve."); else setErr(j.error || "Hiba");
-  }
-
   async function testSend() {
     if (!cfg?.emails.length) { setErr("Nincs email-cím beállítva"); return; }
     setBusy(true); setMsg(null); setErr(null);
-    const r = await fetch("/api/admin/test-send", { method: "POST", headers: { "content-type": "application/json", "x-admin-pin": pin }, body: JSON.stringify({ emails: cfg.emails }) });
+    const r = await fetch("/api/admin/test-send", {
+      method: "POST",
+      headers: { "content-type": "application/json", "x-admin-pin": pin },
+      body: JSON.stringify({ emails: cfg.emails }),
+    });
     setBusy(false);
     const j = await r.json();
     if (r.ok && j.ok) setMsg(`Teszt-küldés sikerült — ${j.message}`); else setErr(j.message || j.error || "Hiba");
@@ -77,6 +99,9 @@ export default function AdminPage() {
         <div className="mx-auto flex max-w-3xl items-center gap-3 px-4 sm:px-6 py-3 sm:py-4">
           <a href="/" className="text-white/70 hover:text-white flex items-center gap-1 text-sm"><ArrowLeft className="h-4 w-4" />Vissza</a>
           <h1 className="flex-1 text-lg sm:text-xl font-bold text-white">Admin · Napi email-riport</h1>
+          {savedAt > 0 && Date.now() - savedAt < 3000 && (
+            <span className="inline-flex items-center gap-1 text-xs text-emerald-400"><CheckCircle2 className="h-3.5 w-3.5" />Elmentve</span>
+          )}
         </div>
       </header>
 
@@ -118,12 +143,19 @@ export default function AdminPage() {
           </p>
         </div>
 
-        <div className="flex flex-wrap gap-2">
-          <button disabled={busy} onClick={save} className="inline-flex items-center gap-2 rounded-lg bg-brand hover:bg-brand/90 text-white font-semibold px-4 py-2 disabled:opacity-50"><Save className="h-4 w-4" />Beállítások mentése</button>
-          <button disabled={busy || !cfg?.emails.length} onClick={testSend} className="inline-flex items-center gap-2 rounded-lg border border-white/15 bg-white/[0.06] hover:bg-white/[0.12] text-white font-semibold px-4 py-2 disabled:opacity-40"><Send className="h-4 w-4" />Teszt-küldés most</button>
+        <div className="flex flex-wrap gap-2 items-center">
+          <button disabled={busy || !cfg?.emails.length} onClick={testSend} className="inline-flex items-center gap-2 rounded-lg bg-brand hover:bg-brand/90 text-white font-semibold px-4 py-2 disabled:opacity-40"><Send className="h-4 w-4" />Teszt-küldés most</button>
+          <button onClick={async () => {
+              setBusy(true); setMsg(null); setErr(null);
+              const r = await fetch("/api/admin/diag", { headers: { "x-admin-pin": pin } });
+              const j = await r.json();
+              setBusy(false);
+              setMsg("Diag: " + JSON.stringify(j, null, 2));
+            }} className="inline-flex items-center gap-1 rounded-md border border-white/15 bg-white/[0.04] hover:bg-white/[0.10] px-3 py-1.5 text-xs text-white/70">Diagnosztika</button>
+          <p className="text-xs text-white/50">A beállítások automatikusan mentődnek.</p>
         </div>
 
-        {msg && <div className="rounded-lg border border-emerald-400/40 bg-emerald-400/10 px-4 py-2.5 text-sm text-emerald-100">{msg}</div>}
+        {msg && <div className="rounded-lg border border-emerald-400/40 bg-emerald-400/10 px-4 py-2.5 text-sm text-emerald-100 whitespace-pre-wrap font-mono break-all">{msg}</div>}
         {err && <div className="rounded-lg border border-red-400/40 bg-red-400/10 px-4 py-2.5 text-sm text-red-100">{err}</div>}
 
         <p className="text-xs text-white/40 text-center pt-4">Vitech Comp Kft. · HUNOR-COOP Zrt.</p>
