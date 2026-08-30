@@ -5,6 +5,7 @@ import type { TrafikData } from "@/lib/types";
 import { NapiTabla } from "@/components/NapiTabla";
 import { HaviTabla } from "@/components/HaviTabla";
 import { ForgTrend } from "@/components/ForgTrend";
+import { NapiTrafikBarChart } from "@/components/NapiTrafikBarChart";
 import { TopTrafikDiagram } from "@/components/TopTrafikDiagram";
 
 const HONAP_NEV = ["", "Január","Február","Március","Április","Május","Június","Július","Augusztus","Szeptember","Október","November","December"];
@@ -102,6 +103,7 @@ export default function Home() {
               Napi forgalom — {napiKulcs}
             </h2>
             <NapiTabla sorok={napiSorok} />
+            <NapiTrafikBarChart sorok={napiSorok} cim={`Napi forgalom trafikonként — ${napiKulcs}`} />
             <ForgTrend data={data} valasztottNap={napiKulcs} />
           </>
         )}

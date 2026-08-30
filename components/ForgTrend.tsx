@@ -24,7 +24,7 @@ export function ForgTrend({ data, valasztottNap }: { data: TrafikData; valasztot
   return (
     <div className="v-card p-4">
       <h3 className="text-sm font-semibold text-white mb-3">
-        Napi összforgalom trend — {ev}. {HONAP_NEV[ho]} ({napokEbbenAHoban.length} nap)
+        Havi összforgalmi trend — {ev}. {HONAP_NEV[ho]} ({napokEbbenAHoban.length} nap)
       </h3>
       <ResponsiveContainer width="100%" height={280}>
         <LineChart data={chartData} margin={{ top: 5, right: 15, bottom: 5, left: 10 }}>
