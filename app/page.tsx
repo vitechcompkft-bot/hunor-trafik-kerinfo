@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect, useMemo } from "react";
-import { Cigarette, Calendar, Clock, RefreshCw } from "lucide-react";
+import { Cigarette, Calendar, Clock, RefreshCw, Settings } from "lucide-react";
 import type { TrafikData } from "@/lib/types";
 import { NapiTabla } from "@/components/NapiTabla";
 import { HaviTabla } from "@/components/HaviTabla";
@@ -58,6 +58,10 @@ export default function Home() {
             <RefreshCw className="h-3 w-3" />
             {new Date(data.generated_at).toLocaleString("hu-HU")}
           </div>
+          <a href="/admin" title="Admin" aria-label="Admin"
+             className="inline-flex items-center justify-center h-9 w-9 rounded-md border border-white/15 bg-white/[0.04] hover:bg-white/[0.12] text-white/75 hover:text-white shrink-0">
+            <Settings className="h-4 w-4" />
+          </a>
         </div>
       </header>
 
