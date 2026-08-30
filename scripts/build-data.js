@@ -10,25 +10,13 @@ const FORG_DB_PATH = path.join(os.homedir(), '.hunor-kimutatasok', 'forgalom.sql
 const OUT = path.join(__dirname, '..', 'public', 'data', 'trafik.json');
 
 // Trafik-név mapping (Nemzeti Dohánybolt + 119 Baks dohány-részleg)
+// Elég a szám (mobilra optimalizált) — a bolt-oszlop tartalmazza a teljes kódot
 const TRAFIK_NEVEK = {
-  '008': '8.sz. Nemzeti Dohánybolt Szentes',
-  '010': '10.sz Nemzeti Dohánybolt Szentes',
-  '011': '11.sz. Nemzeti Dohánybolt Szentes',
-  '013': '13.sz. Nemzeti Dohánybolt Szegvár',
-  '021': '21.sz. Nemzeti Dohánybolt Fábiánsebestyén',
-  '026': '26.sz. Nemzeti Dohánybolt Derekegyház',
-  '030': '30.sz. Nemzeti Dohánybolt Szentes',
-  '031': '31.sz. Nemzeti Dohánybolt Csongrád',
-  '032': '32.sz. Nemzeti Dohánybolt Mindszent',
-  '040': '40.sz. Nemzeti Dohánybolt Mártély',
-  '047': '47.sz. Nemzeti Dohánybolt Szentes',
-  '050': '50.sz. Nemzeti Dohánybolt Székkutas',
-  '055': '55.sz. Nemzeti Dohánybolt Szentes',
-  '057': '57.sz. Nemzeti Dohánybolt Szentes',
-  '060': '60.sz. Nemzeti Dohánybolt Szentes',
-  '070': '70.sz. Nemzeti Dohánybolt Nagymágocs',
-  '119': '119. Baks — dohányrészleg',
-  '550': '550.sz. Nemzeti Dohánybolt Maroslele',
+  '008': '8',   '010': '10',  '011': '11',  '013': '13',
+  '021': '21',  '026': '26',  '030': '30',  '031': '31',
+  '032': '32',  '040': '40',  '047': '47',  '050': '50',
+  '055': '55',  '057': '57',  '060': '60',  '070': '70',
+  '119': '119', '550': '550',
 };
 
 const db = new Database(DB_PATH, { readonly: true, fileMustExist: true });
