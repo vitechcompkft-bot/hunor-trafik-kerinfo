@@ -1,14 +1,12 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { diagRedisEnv, loadConfig, saveConfig } from "@/lib/server/config-store";
+import { isAdmin } from "@/lib/server/admin-auth";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 export async function GET(req: NextRequest) {
-  const pin = process.env.ADMIN_PIN;
-  if (!pin || req.headers.get("x-admin-pin") !== pin) {
-    return NextResponse.json({ error: "Hibás PIN" }, { status: 401 });
-  }
+  if (!isAdmin(req)) return NextResponse.json({ error: "Nincs jogosultság" }, { status: 401 });
   const envDiag = diagRedisEnv();
   const gmail = { user_set: !!process.env.GMAIL_USER, pass_set: !!process.env.GMAIL_APP_PASSWORD };
 

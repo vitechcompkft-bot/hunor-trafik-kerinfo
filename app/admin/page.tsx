@@ -15,7 +15,19 @@ export default function AdminPage() {
   const [err, setErr] = useState<string | null>(null);
   const lastSavedRef = useRef<string>("");
 
-  useEffect(() => { const saved = sessionStorage.getItem("admin-pin"); if (saved) { setPin(saved); tryLogin(saved); } }, []);
+  // 1) Automatikus próbálkozás cookie-val (ha ADMIN_PIN-nel léptél be, ez azonnal átenged)
+  // 2) Ha az nem sikerül, kéri az admin PIN-t
+  useEffect(() => {
+    (async () => {
+      const r = await fetch("/api/admin/config", { headers: {} });
+      if (r.ok) {
+        const data: Cfg = await r.json();
+        setCfg(data);
+        lastSavedRef.current = JSON.stringify(data);
+        setLogged(true);
+      }
+    })();
+  }, []);
 
   async function tryLogin(pinTry: string) {
     setErr(null);
@@ -40,7 +52,7 @@ export default function AdminPage() {
     const t = setTimeout(async () => {
       const r = await fetch("/api/admin/config", {
         method: "PUT",
-        headers: { "content-type": "application/json", "x-admin-pin": pin },
+        headers: { "content-type": "application/json", ...(pin ? { "x-admin-pin": pin } : {}) },
         body: cur,
       });
       if (r.ok) {
@@ -69,7 +81,7 @@ export default function AdminPage() {
     setBusy(true); setMsg(null); setErr(null);
     const r = await fetch("/api/admin/test-send", {
       method: "POST",
-      headers: { "content-type": "application/json", "x-admin-pin": pin },
+      headers: { "content-type": "application/json", ...(pin ? { "x-admin-pin": pin } : {}) },
       body: JSON.stringify({ emails: cfg.emails }),
     });
     setBusy(false);
@@ -147,7 +159,7 @@ export default function AdminPage() {
           <button disabled={busy || !cfg?.emails.length} onClick={testSend} className="inline-flex items-center gap-2 rounded-lg bg-brand hover:bg-brand/90 text-white font-semibold px-4 py-2 disabled:opacity-40"><Send className="h-4 w-4" />Teszt-küldés most</button>
           <button onClick={async () => {
               setBusy(true); setMsg(null); setErr(null);
-              const r = await fetch("/api/admin/diag", { headers: { "x-admin-pin": pin } });
+              const r = await fetch("/api/admin/diag", { headers: { ...(pin ? { "x-admin-pin": pin } : {}) } });
               const j = await r.json();
               setBusy(false);
               setMsg("Diag: " + JSON.stringify(j, null, 2));
