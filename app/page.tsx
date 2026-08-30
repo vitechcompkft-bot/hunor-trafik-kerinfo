@@ -1,69 +1,125 @@
-import Image from "next/image";
+"use client";
+import { useState, useEffect, useMemo } from "react";
+import { Cigarette, Calendar, Clock, RefreshCw } from "lucide-react";
+import type { TrafikData } from "@/lib/types";
+import { NapiTabla } from "@/components/NapiTabla";
+import { HaviTabla } from "@/components/HaviTabla";
+import { ForgTrend } from "@/components/ForgTrend";
+import { TopTrafikDiagram } from "@/components/TopTrafikDiagram";
+
+const HONAP_NEV = ["", "Január","Február","Március","Április","Május","Június","Július","Augusztus","Szeptember","Október","November","December"];
+const BASE_PATH = process.env.NODE_ENV === "production" ? "/hunor-trafik-kerinfo" : "";
 
 export default function Home() {
+  const [data, setData] = useState<TrafikData | null>(null);
+  const [nezet, setNezet] = useState<"napi" | "havi">("napi");
+  const [napiKulcs, setNapiKulcs] = useState<string>("");
+  const [haviKulcs, setHaviKulcs] = useState<string>("");
+
+  useEffect(() => {
+    fetch(`${BASE_PATH}/data/trafik.json`).then(r => r.json()).then((d: TrafikData) => {
+      setData(d);
+      // Ma kimarad — csak a lezárt napok, alapból az előző napra ugrik
+      const ma = new Date().toISOString().slice(0, 10);
+      const napokNemMa = d.napok.filter(n => n < ma).sort();
+      setNapiKulcs(napokNemMa[napokNemMa.length - 1] || d.utolso_napi);
+      setHaviKulcs(d.havi_kulcsok[0] || "");
+    });
+  }, []);
+
+  const valaszthatoNapok = useMemo(() => {
+    if (!data) return [] as string[];
+    // Ma kimarad, mert Z-zárás előtti napok félrevezetőek
+    const ma = new Date().toISOString().slice(0, 10);
+    return [...data.napok].filter(n => n < ma).sort().reverse();
+  }, [data]);
+
+  if (!data) return <main className="p-8 text-white/60">Betöltés…</main>;
+
+  const napiSorok = data.napi[napiKulcs] || [];
+  const haviSorok = data.havi[haviKulcs] || [];
+  const [ev, honap] = haviKulcs.split("-").map(Number);
+  const napiNyitva = napiSorok.filter(r => r.forgalom > 0).length;
+  const napiOssz = napiSorok.length;
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <main className="min-h-screen">
+      <header className="border-b border-white/10 backdrop-blur bg-white/[0.02]">
+        <div className="mx-auto flex max-w-7xl items-center gap-4 px-4 sm:px-6 py-4">
+          <div className="rounded-xl bg-brand p-2.5 text-white shadow-lg shadow-brand/30">
+            <Cigarette className="h-6 w-6" aria-hidden />
+          </div>
+          <div className="flex-1 min-w-0">
+            <h1 className="text-xl sm:text-2xl font-bold text-white tracking-tight">Trafik kereskedelmi info</h1>
+            <p className="text-xs sm:text-sm text-white/50">17 Nemzeti Dohánybolt · napi + havi</p>
+          </div>
+          <div className="text-xs text-white/40 hidden sm:flex items-center gap-1.5">
+            <RefreshCw className="h-3 w-3" />
+            {new Date(data.generated_at).toLocaleString("hu-HU")}
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+      </header>
+
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 py-6 space-y-4">
+        <div className="v-card p-4 flex flex-wrap items-center gap-3">
+          <div className="inline-flex rounded-lg border border-white/10 bg-white/[0.03] overflow-hidden">
+            <button onClick={() => setNezet("napi")}
+              className={"v-toggle-btn inline-flex items-center gap-1.5 " + (nezet === "napi" ? "active" : "")}>
+              <Clock className="h-4 w-4" />Napi
+            </button>
+            <button disabled title="Havi nézet: bázis-adat feltöltése után lesz elérhető"
+              className="v-toggle-btn inline-flex items-center gap-1.5 border-l border-white/10 opacity-40 cursor-not-allowed">
+              <Calendar className="h-4 w-4" />Havi <span className="text-[10px] ml-1">(hamarosan)</span>
+            </button>
+          </div>
+
+          {nezet === "napi" ? (
+            <>
+              <label className="text-sm text-white/70">Dátum:</label>
+              <select value={napiKulcs} onChange={e => setNapiKulcs(e.target.value)} className="v-input">
+                {valaszthatoNapok.map(nap => <option key={nap} value={nap} className="bg-slate-800">{nap}</option>)}
+              </select>
+              <span className="v-badge v-badge-ok">
+                {napiNyitva}/{napiOssz} nyitva
+              </span>
+            </>
+          ) : (
+            <>
+              <label className="text-sm text-white/70">Hónap:</label>
+              <select value={haviKulcs} onChange={e => setHaviKulcs(e.target.value)} className="v-input">
+                {data.havi_kulcsok.map(k => {
+                  const [y, m] = k.split("-").map(Number);
+                  return <option key={k} value={k} className="bg-slate-800">{y}. {HONAP_NEV[m]}</option>;
+                })}
+              </select>
+            </>
+          )}
         </div>
-      </main>
-    </div>
+
+        {nezet === "napi" && (
+          <>
+            <h2 className="text-lg font-semibold text-white">
+              Napi forgalom — {napiKulcs}
+            </h2>
+            <NapiTabla sorok={napiSorok} />
+            <ForgTrend data={data} />
+          </>
+        )}
+
+        {nezet === "havi" && (
+          <>
+            <h2 className="text-lg font-semibold text-white">
+              Havi összesítő — {ev}. {HONAP_NEV[honap]}
+            </h2>
+            <HaviTabla sorok={haviSorok} />
+            <TopTrafikDiagram sorok={haviSorok} cim={`Top trafikok forgalom szerint (${ev}. ${HONAP_NEV[honap]})`} />
+          </>
+        )}
+
+        <footer className="text-center text-xs text-white/30 pt-8">
+          Vitech Comp Kft. · HUNOR-COOP Zrt. trafik-kerinfo dashboard
+        </footer>
+      </div>
+    </main>
   );
 }

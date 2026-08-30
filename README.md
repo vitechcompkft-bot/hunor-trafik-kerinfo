@@ -1,36 +1,36 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# HUNOR Trafik-kereskedelmi info dashboard
 
-## Getting Started
+Vitech Comp Kft. által készített dashboard a HUNOR-COOP Zrt. 17 Nemzeti Dohányboltjának (+ 119. Baks dohányrészleg) forgalmi adataihoz.
 
-First, run the development server:
+## Adatforrás
+
+- **Bolti AIR-Firebird** → **trafik-agent** (v1.6, napi 12:00 Task Scheduler) → **NetPush proxy** → **HK sqlite** (`~/.hunor-kimutatasok/trafik.sqlite`)
+- 30 nap × 3 SP × 17 trafik = ~1500 SP-hívás naponta
+- 119. Baks → **bolt-agent** (v3.10) → külön dohány-blokk (PT_GEP='003')
+
+## Build
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm ci
+node scripts/build-data.js   # trafik.sqlite → public/data/trafik.json
+npm run build                # Next.js static export → out/
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Deploy
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+GitHub Actions automatikusan build-eli és deploy-olja a `gh-pages`-re minden push-nál.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+**Élő URL**: `https://vitechcompkft-bot.github.io/hunor-trafik-kerinfo/`
 
-## Learn More
+## Napi adatfrissítés
 
-To learn more about Next.js, take a look at the following resources:
+A `public/data/trafik.json` fájlt naponta 1× regenerálni kell:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+node scripts/build-data.js
+git add public/data/trafik.json
+git commit -m "Data refresh $(date +%Y-%m-%d)"
+git push
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+GitHub Actions ekkor újra build-eli és publikálja a friss verziót.
