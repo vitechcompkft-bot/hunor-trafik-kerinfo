@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect, useMemo } from "react";
-import { Cigarette, Calendar, Clock, RefreshCw, Settings } from "lucide-react";
+import { Cigarette, Calendar, Clock, RefreshCw, Settings, LogOut } from "lucide-react";
 import type { TrafikData } from "@/lib/types";
 import { NapiTabla } from "@/components/NapiTabla";
 import { HaviTabla } from "@/components/HaviTabla";
@@ -62,6 +62,11 @@ export default function Home() {
              className="inline-flex items-center justify-center h-9 w-9 rounded-md border border-white/15 bg-white/[0.04] hover:bg-white/[0.12] text-white/75 hover:text-white shrink-0">
             <Settings className="h-4 w-4" />
           </a>
+          <button onClick={async () => { await fetch("/api/auth", { method: "DELETE" }); window.location.href = "/login"; }}
+             title="Kilépés" aria-label="Kilépés"
+             className="inline-flex items-center justify-center h-9 w-9 rounded-md border border-white/15 bg-white/[0.04] hover:bg-white/[0.12] text-white/75 hover:text-white shrink-0">
+            <LogOut className="h-4 w-4" />
+          </button>
         </div>
       </header>
 
