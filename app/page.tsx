@@ -122,8 +122,12 @@ export default function Home() {
           </>
         )}
 
-        <footer className="text-center text-xs text-white/30 pt-8">
-          Vitech Comp Kft. · HUNOR-COOP Zrt. trafik-kerinfo dashboard
+        <footer className="text-center text-xs text-white/30 pt-8 space-y-0.5">
+          <div>Vitech Comp Kft. · HUNOR-COOP Zrt. trafik-kerinfo dashboard</div>
+          <div className="text-white/25">
+            v{process.env.NEXT_PUBLIC_APP_VERSION}
+            {process.env.NEXT_PUBLIC_BUILD_TIME && <> · build {new Date(process.env.NEXT_PUBLIC_BUILD_TIME).toLocaleString("hu-HU")}</>}
+          </div>
         </footer>
       </div>
     </main>
