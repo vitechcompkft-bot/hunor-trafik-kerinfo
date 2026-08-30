@@ -49,8 +49,8 @@ export function NapiTabla({ sorok }: { sorok: NapiSor[] }) {
 
   return (
     <div className="v-card overflow-hidden overflow-x-auto">
-      <table className="v-table text-xs w-full">
-        <thead className="uppercase text-[10px]">
+      <table className="v-table text-sm w-full">
+        <thead className="uppercase text-[11px]">
           <tr>
             {fejl("nev", "Trafik", false)}
             {fejl("forgalom", "ÁrbevBr")}

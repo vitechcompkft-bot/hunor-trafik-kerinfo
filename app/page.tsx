@@ -51,7 +51,7 @@ export default function Home() {
           </div>
           <div className="flex-1 min-w-0">
             <h1 className="text-xl sm:text-2xl font-bold text-white tracking-tight">Trafik kereskedelmi info</h1>
-            <p className="text-xs sm:text-sm text-white/50">17 Nemzeti Dohánybolt · napi + havi</p>
+            <p className="text-xs sm:text-sm text-white/70">18 trafik · napi + havi</p>
           </div>
           <div className="text-xs text-white/40 hidden sm:flex items-center gap-1.5">
             <RefreshCw className="h-3 w-3" />
