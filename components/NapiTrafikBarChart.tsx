@@ -1,18 +1,25 @@
 "use client";
+import { useRef } from "react";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, LabelList } from "recharts";
 import type { NapiSor } from "@/lib/types";
+import { ExportGombok } from "./ExportGombok";
+import { exportChartToPng, exportChartToPdf } from "@/lib/export";
 
-export function NapiTrafikBarChart({ sorok, cim }: { sorok: NapiSor[]; cim: string }) {
+export function NapiTrafikBarChart({ sorok, cim, fname = "napi-forgalom-trafik" }: { sorok: NapiSor[]; cim: string; fname?: string }) {
+  const ref = useRef<HTMLDivElement>(null);
   const data = [...sorok]
     .sort((a, b) => b.forgalom - a.forgalom)
-    .map(r => ({
-      bolt: r.bolt,
-      forgalom: Math.round(r.forgalom),
-    }));
+    .map(r => ({ bolt: r.bolt, forgalom: Math.round(r.forgalom) }));
 
   return (
-    <div className="v-card p-4">
-      <h3 className="text-sm font-semibold text-white mb-3">{cim}</h3>
+    <div className="v-card p-4" ref={ref}>
+      <div className="flex items-center justify-between gap-3 mb-3">
+        <h3 className="text-sm font-semibold text-white">{cim}</h3>
+        <ExportGombok kind="chart"
+          onPng={() => ref.current && exportChartToPng(ref.current, `${fname}.png`)}
+          onPdf={() => ref.current && exportChartToPdf(ref.current, `${fname}.pdf`, cim)}
+        />
+      </div>
       <ResponsiveContainer width="100%" height={320}>
         <BarChart data={data} margin={{ top: 20, right: 15, bottom: 5, left: 10 }}>
           <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.08)" />

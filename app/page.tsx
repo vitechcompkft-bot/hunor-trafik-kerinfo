@@ -102,8 +102,8 @@ export default function Home() {
             <h2 className="text-lg font-semibold text-white">
               Napi forgalom — {napiKulcs}
             </h2>
-            <NapiTabla sorok={napiSorok} />
-            <NapiTrafikBarChart sorok={napiSorok} cim={`Napi forgalom trafikonként — ${napiKulcs}`} />
+            <NapiTabla sorok={napiSorok} datum={napiKulcs} />
+            <NapiTrafikBarChart sorok={napiSorok} cim={`Napi forgalom trafikonként — ${napiKulcs}`} fname={`napi-forgalom-trafik-${napiKulcs}`} />
             <ForgTrend data={data} valasztottNap={napiKulcs} />
           </>
         )}
@@ -113,8 +113,8 @@ export default function Home() {
             <h2 className="text-lg font-semibold text-white">
               Havi összesítő — {ev}. {HONAP_NEV[honap]}
             </h2>
-            <HaviTabla sorok={haviSorok} />
-            <TopTrafikDiagram sorok={haviSorok} cim={`Top trafikok forgalom szerint (${ev}. ${HONAP_NEV[honap]})`} />
+            <HaviTabla sorok={haviSorok} honap={`${ev}. ${HONAP_NEV[honap]}`} />
+            <TopTrafikDiagram sorok={haviSorok} cim={`Top trafikok forgalom szerint (${ev}. ${HONAP_NEV[honap]})`} fname={`top-trafik-${haviKulcs}`} />
           </>
         )}
 

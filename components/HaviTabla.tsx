@@ -3,17 +3,32 @@ import { useState, useMemo } from "react";
 import { ChevronUp, ChevronDown } from "lucide-react";
 import type { HaviSor } from "@/lib/types";
 import { ft, num, pct } from "@/lib/utils";
+import { ExportGombok } from "./ExportGombok";
+import { exportTableToXlsx, exportTableToPdf, type ExportColumn } from "@/lib/export";
 
 type Rendezes = { oszlop: keyof HaviSor; irany: "asc" | "desc" };
 
-export function HaviTabla({ sorok }: { sorok: HaviSor[] }) {
+const HAVI_OSZLOPOK: ExportColumn[] = [
+  { header: "Trafik", key: "nev", format: "text" },
+  { header: "ÁrbevBr", key: "forgalom", format: "ft" },
+  { header: "Bázis", key: "forgalom_bazis", format: "ft" },
+  { header: "ÁrRésNe", key: "arres", format: "ft" },
+  { header: "ÁrRés%", key: "arres_szint", format: "pct" },
+  { header: "BlokkDb", key: "vevoszam", format: "num" },
+  { header: "ZáróBr", key: "keszlet", format: "ft" },
+  { header: "Leértössz", key: "leertekeles", format: "ft" },
+  { header: "LeírásBr", key: "leiras_br", format: "ft" },
+  { header: "EmozgBr", key: "emozg_br", format: "ft" },
+];
+
+export function HaviTabla({ sorok, honap = "" }: { sorok: HaviSor[]; honap?: string }) {
   const [rendez, setRendez] = useState<Rendezes>({ oszlop: "bolt", irany: "asc" });
 
   const sorbaRendezett = useMemo(() => {
     const s = [...sorok];
     s.sort((a, b) => {
-      const va = a[rendez.oszlop] as string | number;
-      const vb = b[rendez.oszlop] as string | number;
+      const va = rendez.oszlop === "nev" ? a.bolt : (a[rendez.oszlop] as string | number);
+      const vb = rendez.oszlop === "nev" ? b.bolt : (b[rendez.oszlop] as string | number);
       if (va < vb) return rendez.irany === "asc" ? -1 : 1;
       if (va > vb) return rendez.irany === "asc" ? 1 : -1;
       return 0;
@@ -47,8 +62,30 @@ export function HaviTabla({ sorok }: { sorok: HaviSor[] }) {
   const osszEmozg = sorok.reduce((s, r) => s + r.emozg_br, 0);
   const atlagArresSz = osszForg > 0 ? (osszArres / osszForg * 127) : 0;
 
+  const cim = honap ? `Havi összesítő — ${honap}` : "Havi összesítő";
+  const fname = honap ? `trafik-havi-${honap}` : "trafik-havi";
+
+  // Az exportált sorokba írjuk hozzá az Index%-ot is
+  const exportSorok = sorbaRendezett.map(r => ({
+    ...r,
+    _index: r.forgalom_bazis > 0 ? (r.forgalom / r.forgalom_bazis * 100) : 0,
+  }));
+  const exportOszlopok: ExportColumn[] = [
+    ...HAVI_OSZLOPOK.slice(0, 3),  // Trafik, ÁrbevBr, Bázis
+    { header: "Index %", key: "_index", format: "pct" },
+    ...HAVI_OSZLOPOK.slice(3),
+  ];
+
   return (
-    <div className="v-card overflow-hidden overflow-x-auto">
+    <div className="v-card overflow-hidden">
+      <div className="flex items-center justify-between gap-3 px-3 py-2 border-b border-white/10">
+        <span className="text-xs text-white/60">{sorbaRendezett.length} trafik</span>
+        <ExportGombok kind="table"
+          onXlsx={() => exportTableToXlsx(exportSorok, exportOszlopok, `${fname}.xlsx`, cim)}
+          onPdf={() => exportTableToPdf(exportSorok, exportOszlopok, `${fname}.pdf`, cim)}
+        />
+      </div>
+      <div className="overflow-x-auto">
       <table className="v-table text-sm w-full">
         <thead className="uppercase text-sm">
           <tr>
@@ -109,6 +146,7 @@ export function HaviTabla({ sorok }: { sorok: HaviSor[] }) {
           </tr>
         </tbody>
       </table>
+      </div>
     </div>
   );
 }
