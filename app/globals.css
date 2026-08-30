@@ -12,10 +12,10 @@
 
 body {
   background:
-    radial-gradient(1100px 600px at 12% -10%, rgba(26, 115, 232, 0.20), transparent 60%),
-    radial-gradient(900px 520px at 100% 0%, rgba(14, 142, 232, 0.12), transparent 55%),
-    linear-gradient(180deg, #0a1b34 0%, #08152e 100%);
-  color: #e9eef6;
+    radial-gradient(1100px 600px at 12% -10%, rgba(56, 145, 255, 0.25), transparent 60%),
+    radial-gradient(900px 520px at 100% 0%, rgba(46, 165, 255, 0.18), transparent 55%),
+    linear-gradient(180deg, #14345f 0%, #102a4c 100%);
+  color: #ffffff;
   min-height: 100vh;
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   background-attachment: fixed;
@@ -24,27 +24,28 @@ body {
 /* Vitech card */
 .v-card {
   border-radius: 1rem;
-  border: 1px solid rgba(255, 255, 255, 0.10);
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.03));
-  box-shadow: 0 10px 30px -18px rgba(0, 0, 0, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.05));
+  box-shadow: 0 10px 30px -18px rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(6px);
 }
 
 /* Táblázat cellák */
 .v-table thead th {
-  color: rgba(255, 255, 255, 0.55);
+  color: rgba(255, 255, 255, 0.85);
   font-weight: 600;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
 }
 .v-table tbody tr {
-  border-top: 1px solid rgba(255, 255, 255, 0.04);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  color: #ffffff;
 }
 .v-table tbody tr:hover {
-  background: rgba(26, 115, 232, 0.08);
+  background: rgba(56, 145, 255, 0.12);
 }
 .v-table .row-osszes {
-  border-top: 2px solid rgba(26, 115, 232, 0.5);
-  background: rgba(26, 115, 232, 0.12);
+  border-top: 2px solid rgba(56, 145, 255, 0.6);
+  background: rgba(56, 145, 255, 0.18);
   color: #ffffff;
   font-weight: 700;
 }

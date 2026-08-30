@@ -72,7 +72,7 @@ export function NapiTabla({ sorok }: { sorok: NapiSor[] }) {
               <td className="px-2 py-1.5 text-right tabular-nums">{ft(r.arres_ne)}</td>
               <td className="px-2 py-1.5 text-right tabular-nums">{r.arres_sz ? pct(r.arres_sz) : "—"}</td>
               <td className="px-2 py-1.5 text-right tabular-nums">{num(r.vevoszam)}</td>
-              <td className="px-2 py-1.5 text-right tabular-nums text-white/60">{ft(r.keszlet_br)}</td>
+              <td className="px-2 py-1.5 text-right tabular-nums text-white/80">{ft(r.keszlet_br)}</td>
               <td className="px-2 py-1.5 text-right tabular-nums">{ft(r.leertekeles)}</td>
               <td className="px-2 py-1.5 text-right tabular-nums">{ft(r.leiras_br)}</td>
               <td className="px-2 py-1.5 text-right tabular-nums">{ft(r.emozg_br)}</td>
