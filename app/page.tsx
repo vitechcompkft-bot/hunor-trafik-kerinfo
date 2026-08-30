@@ -45,24 +45,24 @@ export default function Home() {
 
   return (
     <main className="min-h-screen">
-      <header className="border-b border-white/10 backdrop-blur bg-white/[0.02]">
-        <div className="mx-auto flex max-w-7xl items-center gap-4 px-4 sm:px-6 py-4">
-          <div className="rounded-xl bg-brand p-2.5 text-white shadow-lg shadow-brand/30">
-            <Cigarette className="h-6 w-6" aria-hidden />
+      <header className="border-b border-white/10 backdrop-blur bg-white/[0.02] sticky top-0 z-10">
+        <div className="mx-auto flex max-w-7xl items-center gap-2 sm:gap-4 px-3 sm:px-6 py-2.5 sm:py-4">
+          <div className="rounded-lg sm:rounded-xl bg-brand p-2 sm:p-2.5 text-white shadow-lg shadow-brand/30 shrink-0">
+            <Cigarette className="h-5 w-5 sm:h-6 sm:w-6" aria-hidden />
           </div>
           <div className="flex-1 min-w-0">
-            <h1 className="text-xl sm:text-2xl font-bold text-white tracking-tight">Trafik kereskedelmi info</h1>
-            <p className="text-xs sm:text-sm text-white/70">18 trafik · napi + havi</p>
+            <h1 className="text-base sm:text-2xl font-bold text-white tracking-tight leading-tight">Trafik kereskedelmi info</h1>
+            <p className="text-[11px] sm:text-sm text-white/70 leading-tight">18 trafik · napi + havi</p>
           </div>
-          <div className="text-xs text-white/40 hidden sm:flex items-center gap-1.5">
+          <div className="text-xs text-white/40 hidden md:flex items-center gap-1.5 shrink-0">
             <RefreshCw className="h-3 w-3" />
             {new Date(data.generated_at).toLocaleString("hu-HU")}
           </div>
         </div>
       </header>
 
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 py-6 space-y-4">
-        <div className="v-card p-4 flex flex-wrap items-center gap-3">
+      <div className="mx-auto max-w-7xl px-3 sm:px-6 py-3 sm:py-6 space-y-3 sm:space-y-4">
+        <div className="v-card p-3 sm:p-4 flex flex-wrap items-center gap-2 sm:gap-3">
           <div className="inline-flex rounded-lg border border-white/10 bg-white/[0.03] overflow-hidden">
             <button onClick={() => setNezet("napi")}
               className={"v-toggle-btn inline-flex items-center gap-1.5 " + (nezet === "napi" ? "active" : "")}>
@@ -99,7 +99,7 @@ export default function Home() {
 
         {nezet === "napi" && (
           <>
-            <h2 className="text-lg font-semibold text-white">
+            <h2 className="text-base sm:text-lg font-semibold text-white">
               Napi forgalom — {napiKulcs}
             </h2>
             <NapiTabla sorok={napiSorok} datum={napiKulcs} />
@@ -110,7 +110,7 @@ export default function Home() {
 
         {nezet === "havi" && (
           <>
-            <h2 className="text-lg font-semibold text-white">
+            <h2 className="text-base sm:text-lg font-semibold text-white">
               Havi összesítő — {ev}. {HONAP_NEV[honap]}
             </h2>
             <HaviTabla sorok={haviSorok} honap={`${ev}. ${HONAP_NEV[honap]}`} />

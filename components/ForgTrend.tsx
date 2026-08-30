@@ -24,15 +24,16 @@ export function ForgTrend({ data, valasztottNap }: { data: TrafikData; valasztot
   const fname = `havi-osszforgalmi-trend-${honapPrefix}`;
 
   return (
-    <div className="v-card p-4" ref={ref}>
-      <div className="flex items-center justify-between gap-3 mb-3">
-        <h3 className="text-sm font-semibold text-white">{cim}</h3>
+    <div className="v-card p-3 sm:p-4" ref={ref}>
+      <div className="flex items-center justify-between gap-2 sm:gap-3 mb-3">
+        <h3 className="text-xs sm:text-sm font-semibold text-white leading-tight">{cim}</h3>
         <ExportGombok kind="chart"
           onPng={() => ref.current && exportChartToPng(ref.current, `${fname}.png`)}
           onPdf={() => ref.current && exportChartToPdf(ref.current, `${fname}.pdf`, cim)}
         />
       </div>
-      <ResponsiveContainer width="100%" height={280}>
+      <div className="h-[220px] sm:h-[280px] landscape:max-md:h-[200px]">
+      <ResponsiveContainer width="100%" height="100%">
         <LineChart data={chartData} margin={{ top: 5, right: 15, bottom: 5, left: 10 }}>
           <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.08)" />
           <XAxis dataKey="nap" tick={{ fontSize: 11, fill: "rgba(255,255,255,0.6)" }} />
@@ -42,6 +43,7 @@ export function ForgTrend({ data, valasztottNap }: { data: TrafikData; valasztot
           <Line type="monotone" dataKey="forgalom" stroke="#1A73E8" strokeWidth={2.5} dot={{ r: 3, fill: "#1A73E8" }} name="Össz-forgalom" />
         </LineChart>
       </ResponsiveContainer>
+      </div>
     </div>
   );
 }

@@ -12,15 +12,16 @@ export function TopTrafikDiagram({ sorok, cim, fname = "top-trafik" }: { sorok: 
     .map(r => ({ bolt: r.bolt, forgalom: Math.round(r.forgalom) }));
 
   return (
-    <div className="v-card p-4" ref={ref}>
-      <div className="flex items-center justify-between gap-3 mb-3">
-        <h3 className="text-sm font-semibold text-white">{cim}</h3>
+    <div className="v-card p-3 sm:p-4" ref={ref}>
+      <div className="flex items-center justify-between gap-2 sm:gap-3 mb-3">
+        <h3 className="text-xs sm:text-sm font-semibold text-white leading-tight">{cim}</h3>
         <ExportGombok kind="chart"
           onPng={() => ref.current && exportChartToPng(ref.current, `${fname}.png`)}
           onPdf={() => ref.current && exportChartToPdf(ref.current, `${fname}.pdf`, cim)}
         />
       </div>
-      <ResponsiveContainer width="100%" height={320}>
+      <div className="h-[240px] sm:h-[320px] landscape:max-md:h-[220px]">
+      <ResponsiveContainer width="100%" height="100%">
         <BarChart data={data} margin={{ top: 5, right: 15, bottom: 5, left: 10 }}>
           <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.08)" />
           <XAxis dataKey="bolt" tick={{ fontSize: 11, fill: "rgba(255,255,255,0.6)" }} />
@@ -29,6 +30,7 @@ export function TopTrafikDiagram({ sorok, cim, fname = "top-trafik" }: { sorok: 
           <Bar dataKey="forgalom" fill="#1A73E8" radius={[4, 4, 0, 0]} />
         </BarChart>
       </ResponsiveContainer>
+      </div>
     </div>
   );
 }
