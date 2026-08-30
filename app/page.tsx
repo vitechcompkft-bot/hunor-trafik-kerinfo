@@ -8,7 +8,7 @@ import { ForgTrend } from "@/components/ForgTrend";
 import { TopTrafikDiagram } from "@/components/TopTrafikDiagram";
 
 const HONAP_NEV = ["", "Január","Február","Március","Április","Május","Június","Július","Augusztus","Szeptember","Október","November","December"];
-const BASE_PATH = process.env.NODE_ENV === "production" ? "/hunor-trafik-kerinfo" : "";
+const BASE_PATH = "";  // Vercel esetén nincs basePath
 
 export default function Home() {
   const [data, setData] = useState<TrafikData | null>(null);
