@@ -10,7 +10,8 @@ export type HaviSor = {
   bolt: string; nev: string;
   forgalom: number; forgalom_bazis: number;
   vevoszam: number; vevoszam_bazis: number;
-  keszlet: number; arres: number; arres_szint: number;
+  keszlet: number; keszlet_bazis: number;
+  arres: number; arres_szint: number;
   leertekeles: number; leiras_br: number; emozg_br: number;
 };
 

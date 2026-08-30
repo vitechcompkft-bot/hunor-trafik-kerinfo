@@ -8,19 +8,28 @@ import { exportTableToXlsx, exportTableToPdf, type ExportColumn } from "@/lib/ex
 
 type Rendezes = { oszlop: keyof HaviSor; irany: "asc" | "desc" };
 
+// Sorrend a látvány szerint: minden ahol van bázis: Bázis → Tény → Idx%
 const HAVI_OSZLOPOK: ExportColumn[] = [
   { header: "Trafik", key: "nev", format: "text" },
+  { header: "Bázis (Ft)", key: "forgalom_bazis", format: "ft" },
   { header: "ÁrbevBr", key: "forgalom", format: "ft" },
-  { header: "Bázis", key: "forgalom_bazis", format: "ft" },
   { header: "ÁrRésNe", key: "arres", format: "ft" },
   { header: "ÁrRés%", key: "arres_szint", format: "pct" },
-  { header: "BlokkDb", key: "vevoszam", format: "num" },
-  { header: "BlokkDb Bázis", key: "vevoszam_bazis", format: "num" },
+  { header: "Vevő Db Bázis", key: "vevoszam_bazis", format: "num" },
+  { header: "Vevő Db", key: "vevoszam", format: "num" },
+  { header: "Készl. Bázis", key: "keszlet_bazis", format: "ft" },
   { header: "ZáróBr", key: "keszlet", format: "ft" },
   { header: "Leértössz", key: "leertekeles", format: "ft" },
   { header: "LeírásBr", key: "leiras_br", format: "ft" },
   { header: "EmozgBr", key: "emozg_br", format: "ft" },
 ];
+
+// Kiszámított index-mezők neve — külön, csak az exportnál
+const IDX_OSZLOPOK = {
+  _fidx: "Index %",
+  _vidx: "Vevő Idx %",
+  _kidx: "Készl. Idx %",
+};
 
 export function HaviTabla({ sorok, honap = "" }: { sorok: HaviSor[]; honap?: string }) {
   const [rendez, setRendez] = useState<Rendezes>({ oszlop: "bolt", irany: "asc" });
@@ -37,7 +46,7 @@ export function HaviTabla({ sorok, honap = "" }: { sorok: HaviSor[]; honap?: str
     return s;
   }, [sorok, rendez]);
 
-  function fejl(kulcs: keyof HaviSor, cim: string, jobbra = true) {
+  function fejl(kulcs: keyof HaviSor, cim: string, jobbra = true, dim = false) {
     const active = rendez.oszlop === kulcs;
     return (
       <th
@@ -45,7 +54,7 @@ export function HaviTabla({ sorok, honap = "" }: { sorok: HaviSor[]; honap?: str
           oszlop: kulcs,
           irany: r.oszlop === kulcs && r.irany === "asc" ? "desc" : "asc",
         }))}
-        className={`px-2 py-2 cursor-pointer hover:bg-white/[0.06] select-none whitespace-nowrap ${jobbra ? "text-right" : "text-left"}`}
+        className={`px-2 py-2 cursor-pointer hover:bg-white/[0.06] select-none whitespace-nowrap ${jobbra ? "text-right" : "text-left"} ${dim ? "text-white/60" : ""}`}
       >
         <span className="inline-flex items-center gap-1">
           {cim}
@@ -55,8 +64,11 @@ export function HaviTabla({ sorok, honap = "" }: { sorok: HaviSor[]; honap?: str
     );
   }
 
+  const osszForgB = sorok.reduce((s, r) => s + (r.forgalom_bazis || 0), 0);
   const osszForg = sorok.reduce((s, r) => s + r.forgalom, 0);
+  const osszVevB = sorok.reduce((s, r) => s + (r.vevoszam_bazis || 0), 0);
   const osszVev = sorok.reduce((s, r) => s + r.vevoszam, 0);
+  const osszKeszB = sorok.reduce((s, r) => s + (r.keszlet_bazis || 0), 0);
   const osszKesz = sorok.reduce((s, r) => s + r.keszlet, 0);
   const osszArres = sorok.reduce((s, r) => s + r.arres, 0);
   const osszLeert = sorok.reduce((s, r) => s + r.leertekeles, 0);
@@ -66,19 +78,35 @@ export function HaviTabla({ sorok, honap = "" }: { sorok: HaviSor[]; honap?: str
   const cim = honap ? `Havi összesítő — ${honap}` : "Havi összesítő";
   const fname = honap ? `trafik-havi-${honap}` : "trafik-havi";
 
-  // Az exportált sorokba írjuk hozzá az Index%-ot (forgalom + vevőszám)
+  // Exportba az Idx% is bekerül (bázis-tény-idx sorrendben)
   const exportSorok = sorbaRendezett.map(r => ({
     ...r,
-    _index: r.forgalom_bazis > 0 ? (r.forgalom / r.forgalom_bazis * 100) : 0,
+    _fidx: r.forgalom_bazis > 0 ? (r.forgalom / r.forgalom_bazis * 100) : 0,
     _vidx: r.vevoszam_bazis > 0 ? (r.vevoszam / r.vevoszam_bazis * 100) : 0,
+    _kidx: r.keszlet_bazis > 0 ? (r.keszlet / r.keszlet_bazis * 100) : 0,
   }));
   const exportOszlopok: ExportColumn[] = [
-    ...HAVI_OSZLOPOK.slice(0, 3),  // Trafik, ÁrbevBr, Bázis
-    { header: "Index %", key: "_index", format: "pct" },
-    ...HAVI_OSZLOPOK.slice(3, 7),  // ÁrRésNe, ÁrRés%, BlokkDb, BlokkDb Bázis
-    { header: "Bl. Idx %", key: "_vidx", format: "pct" },
-    ...HAVI_OSZLOPOK.slice(7),
+    HAVI_OSZLOPOK[0],  // Trafik
+    HAVI_OSZLOPOK[1],  // Bázis (Ft)
+    HAVI_OSZLOPOK[2],  // ÁrbevBr
+    { header: IDX_OSZLOPOK._fidx, key: "_fidx", format: "pct" },
+    HAVI_OSZLOPOK[3],  // ÁrRésNe
+    HAVI_OSZLOPOK[4],  // ÁrRés%
+    HAVI_OSZLOPOK[5],  // Vevő Db Bázis
+    HAVI_OSZLOPOK[6],  // Vevő Db
+    { header: IDX_OSZLOPOK._vidx, key: "_vidx", format: "pct" },
+    HAVI_OSZLOPOK[7],  // Készl. Bázis
+    HAVI_OSZLOPOK[8],  // ZáróBr
+    { header: IDX_OSZLOPOK._kidx, key: "_kidx", format: "pct" },
+    HAVI_OSZLOPOK[9],  // Leértössz
+    HAVI_OSZLOPOK[10], // LeírásBr
+    HAVI_OSZLOPOK[11], // EmozgBr
   ];
+
+  // Színkód segéd
+  function idxCls(val: number, gyanus: boolean) {
+    return gyanus ? "text-amber-400" : val >= 100 ? "text-emerald-400" : val > 0 ? "text-red-400" : "text-white/40";
+  }
 
   return (
     <div className="v-card overflow-hidden">
@@ -94,15 +122,17 @@ export function HaviTabla({ sorok, honap = "" }: { sorok: HaviSor[]; honap?: str
         <thead className="uppercase text-sm">
           <tr>
             {fejl("nev", "Trafik", false)}
+            {fejl("forgalom_bazis", "Bázis", true, true)}
             {fejl("forgalom", "ÁrbevBr")}
-            {fejl("forgalom_bazis", "Bázis")}
             <th className="px-2 py-2 text-right whitespace-nowrap">Index %</th>
             {fejl("arres", "ÁrRésNe")}
             {fejl("arres_szint", "ÁrRés%")}
-            {fejl("vevoszam", "BlokkDb")}
-            {fejl("vevoszam_bazis", "Bl. Bázis")}
-            <th className="px-2 py-2 text-right whitespace-nowrap">Bl. Idx %</th>
+            {fejl("vevoszam_bazis", "Vevő Db Bázis", true, true)}
+            {fejl("vevoszam", "Vevő Db")}
+            <th className="px-2 py-2 text-right whitespace-nowrap">Vevő Idx %</th>
+            {fejl("keszlet_bazis", "Készl. Bázis", true, true)}
             {fejl("keszlet", "ZáróBr")}
+            <th className="px-2 py-2 text-right whitespace-nowrap">Készl. Idx %</th>
             {fejl("leertekeles", "Leértössz")}
             {fejl("leiras_br", "LeírásBr")}
             {fejl("emozg_br", "EmozgBr")}
@@ -110,27 +140,26 @@ export function HaviTabla({ sorok, honap = "" }: { sorok: HaviSor[]; honap?: str
         </thead>
         <tbody>
           {sorbaRendezett.map(r => {
-            const idx = r.forgalom_bazis > 0 ? (r.forgalom / r.forgalom_bazis * 100) : 0;
-            // Gyanús bázis: ha az arány >200% vagy <50%, akkor valszeg részleges/hibás adat
-            const gyanus = idx > 200 || (idx > 0 && idx < 50);
-            const idxCls = gyanus ? "text-amber-400" : idx >= 100 ? "text-emerald-400" : idx > 0 ? "text-red-400" : "text-white/40";
+            const fidx = r.forgalom_bazis > 0 ? (r.forgalom / r.forgalom_bazis * 100) : 0;
+            const fgy = fidx > 200 || (fidx > 0 && fidx < 50);
+            const vidx = r.vevoszam_bazis > 0 ? (r.vevoszam / r.vevoszam_bazis * 100) : 0;
+            const vgy = vidx > 200 || (vidx > 0 && vidx < 50);
+            const kidx = r.keszlet_bazis > 0 ? (r.keszlet / r.keszlet_bazis * 100) : 0;
+            const kgy = kidx > 200 || (kidx > 0 && kidx < 50);
             return (
             <tr key={r.bolt}>
               <td className="px-2 py-1.5 font-medium whitespace-nowrap">{r.nev}</td>
+              <td className="px-2 py-1.5 text-right tabular-nums whitespace-nowrap text-white/60" title={fgy ? "Gyanús bázis-adat" : ""}>{r.forgalom_bazis > 0 ? ft(r.forgalom_bazis) : "—"}</td>
               <td className="px-2 py-1.5 text-right tabular-nums whitespace-nowrap">{ft(r.forgalom)}</td>
-              <td className="px-2 py-1.5 text-right tabular-nums whitespace-nowrap text-white/50" title={gyanus ? "Gyanús bázis-adat (részleges)" : ""}>{r.forgalom_bazis > 0 ? ft(r.forgalom_bazis) : "—"}</td>
-              <td className={`px-2 py-1.5 text-right tabular-nums whitespace-nowrap font-semibold ${idxCls}`} title={gyanus ? "Bázis-adat gyanús" : ""}>{idx > 0 ? (gyanus ? "⚠ " : "") + pct(idx) : "—"}</td>
+              <td className={`px-2 py-1.5 text-right tabular-nums whitespace-nowrap font-semibold ${idxCls(fidx, fgy)}`}>{fidx > 0 ? (fgy ? "⚠ " : "") + pct(fidx) : "—"}</td>
               <td className="px-2 py-1.5 text-right tabular-nums whitespace-nowrap">{ft(r.arres)}</td>
               <td className="px-2 py-1.5 text-right tabular-nums whitespace-nowrap">{r.arres_szint ? pct(r.arres_szint) : "—"}</td>
+              <td className="px-2 py-1.5 text-right tabular-nums whitespace-nowrap text-white/60">{r.vevoszam_bazis > 0 ? num(r.vevoszam_bazis) : "—"}</td>
               <td className="px-2 py-1.5 text-right tabular-nums whitespace-nowrap">{num(r.vevoszam)}</td>
-              <td className="px-2 py-1.5 text-right tabular-nums text-white/50 whitespace-nowrap">{r.vevoszam_bazis > 0 ? num(r.vevoszam_bazis) : "—"}</td>
-              {(() => {
-                const bidx = r.vevoszam_bazis > 0 ? (r.vevoszam / r.vevoszam_bazis * 100) : 0;
-                const bgyanus = bidx > 200 || (bidx > 0 && bidx < 50);
-                const bcls = bgyanus ? "text-amber-400" : bidx >= 100 ? "text-emerald-400" : bidx > 0 ? "text-red-400" : "text-white/40";
-                return <td className={`px-2 py-1.5 text-right tabular-nums font-semibold whitespace-nowrap ${bcls}`}>{bidx > 0 ? (bgyanus ? "⚠ " : "") + pct(bidx) : "—"}</td>;
-              })()}
-              <td className="px-2 py-1.5 text-right tabular-nums whitespace-nowrap text-white/60">{ft(r.keszlet)}</td>
+              <td className={`px-2 py-1.5 text-right tabular-nums whitespace-nowrap font-semibold ${idxCls(vidx, vgy)}`}>{vidx > 0 ? (vgy ? "⚠ " : "") + pct(vidx) : "—"}</td>
+              <td className="px-2 py-1.5 text-right tabular-nums whitespace-nowrap text-white/60">{r.keszlet_bazis > 0 ? ft(r.keszlet_bazis) : "—"}</td>
+              <td className="px-2 py-1.5 text-right tabular-nums whitespace-nowrap">{ft(r.keszlet)}</td>
+              <td className={`px-2 py-1.5 text-right tabular-nums whitespace-nowrap font-semibold ${idxCls(kidx, kgy)}`}>{kidx > 0 ? (kgy ? "⚠ " : "") + pct(kidx) : "—"}</td>
               <td className="px-2 py-1.5 text-right tabular-nums whitespace-nowrap">{ft(r.leertekeles)}</td>
               <td className="px-2 py-1.5 text-right tabular-nums whitespace-nowrap">{ft(r.leiras_br)}</td>
               <td className="px-2 py-1.5 text-right tabular-nums whitespace-nowrap">{ft(r.emozg_br)}</td>
@@ -139,29 +168,26 @@ export function HaviTabla({ sorok, honap = "" }: { sorok: HaviSor[]; honap?: str
           })}
           <tr className="row-osszes">
             <td className="px-2 py-2">Összesen</td>
+            <td className="px-2 py-2 text-right tabular-nums whitespace-nowrap text-white/70">{osszForgB > 0 ? ft(osszForgB) : "—"}</td>
             <td className="px-2 py-2 text-right tabular-nums whitespace-nowrap">{ft(osszForg)}</td>
             {(() => {
-              const osszBazis = sorok.reduce((s,r) => s + (r.forgalom_bazis || 0), 0);
-              const osszIdx = osszBazis > 0 ? (osszForg / osszBazis * 100) : 0;
-              const cls = osszIdx >= 100 ? "text-emerald-400" : osszIdx > 0 ? "text-red-400" : "text-white/40";
-              return <>
-                <td className="px-2 py-2 text-right tabular-nums whitespace-nowrap text-white/70">{osszBazis > 0 ? ft(osszBazis) : "—"}</td>
-                <td className={`px-2 py-2 text-right tabular-nums whitespace-nowrap ${cls}`}>{osszIdx > 0 ? pct(osszIdx) : "—"}</td>
-              </>;
+              const idx = osszForgB > 0 ? (osszForg / osszForgB * 100) : 0;
+              return <td className={`px-2 py-2 text-right tabular-nums whitespace-nowrap ${idxCls(idx, false)}`}>{idx > 0 ? pct(idx) : "—"}</td>;
             })()}
             <td className="px-2 py-2 text-right tabular-nums whitespace-nowrap">{ft(osszArres)}</td>
             <td className="px-2 py-2 text-right tabular-nums whitespace-nowrap">{pct(atlagArresSz)}</td>
+            <td className="px-2 py-2 text-right tabular-nums whitespace-nowrap text-white/70">{osszVevB > 0 ? num(osszVevB) : "—"}</td>
             <td className="px-2 py-2 text-right tabular-nums whitespace-nowrap">{num(osszVev)}</td>
             {(() => {
-              const osszVevB = sorok.reduce((s, r) => s + (r.vevoszam_bazis || 0), 0);
-              const bidx = osszVevB > 0 ? (osszVev / osszVevB * 100) : 0;
-              const bcls = bidx >= 100 ? "text-emerald-400" : bidx > 0 ? "text-red-400" : "text-white/40";
-              return <>
-                <td className="px-2 py-2 text-right tabular-nums whitespace-nowrap text-white/70">{osszVevB > 0 ? num(osszVevB) : "—"}</td>
-                <td className={`px-2 py-2 text-right tabular-nums whitespace-nowrap ${bcls}`}>{bidx > 0 ? pct(bidx) : "—"}</td>
-              </>;
+              const idx = osszVevB > 0 ? (osszVev / osszVevB * 100) : 0;
+              return <td className={`px-2 py-2 text-right tabular-nums whitespace-nowrap ${idxCls(idx, false)}`}>{idx > 0 ? pct(idx) : "—"}</td>;
             })()}
+            <td className="px-2 py-2 text-right tabular-nums whitespace-nowrap text-white/70">{osszKeszB > 0 ? ft(osszKeszB) : "—"}</td>
             <td className="px-2 py-2 text-right tabular-nums whitespace-nowrap">{ft(osszKesz)}</td>
+            {(() => {
+              const idx = osszKeszB > 0 ? (osszKesz / osszKeszB * 100) : 0;
+              return <td className={`px-2 py-2 text-right tabular-nums whitespace-nowrap ${idxCls(idx, false)}`}>{idx > 0 ? pct(idx) : "—"}</td>;
+            })()}
             <td className="px-2 py-2 text-right tabular-nums whitespace-nowrap">{ft(osszLeert)}</td>
             <td className="px-2 py-2 text-right tabular-nums whitespace-nowrap">—</td>
             <td className="px-2 py-2 text-right tabular-nums whitespace-nowrap">{ft(osszEmozg)}</td>
