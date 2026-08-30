@@ -2,6 +2,7 @@
 import * as XLSX from "xlsx";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
+import { toPng } from "html-to-image";
 
 export type ExportColumn = { header: string; key: string; format?: "ft" | "num" | "pct" | "text" };
 
@@ -67,58 +68,54 @@ export function exportTableToPdf<T extends Record<string, unknown>>(
   doc.save(filename);
 }
 
-// Diagram-export: az adott DOM-elem alatti első SVG-t canvas-ra rajzolja, majd letölti
-async function svgToCanvas(svg: SVGElement, scale = 2): Promise<HTMLCanvasElement> {
-  const bbox = svg.getBoundingClientRect();
-  const w = Math.max(1, bbox.width);
-  const h = Math.max(1, bbox.height);
-  // Klón + explicit méretek
-  const clone = svg.cloneNode(true) as SVGElement;
-  clone.setAttribute("width", String(w));
-  clone.setAttribute("height", String(h));
-  clone.setAttribute("xmlns", "http://www.w3.org/2000/svg");
-  const svgStr = new XMLSerializer().serializeToString(clone);
-  const svg64 = btoa(unescape(encodeURIComponent(svgStr)));
-  const img = new Image();
-  img.crossOrigin = "anonymous";
-  await new Promise<void>((res, rej) => {
-    img.onload = () => res();
-    img.onerror = () => rej(new Error("SVG betöltés hiba"));
-    img.src = "data:image/svg+xml;base64," + svg64;
-  });
-  const canvas = document.createElement("canvas");
-  canvas.width = w * scale;
-  canvas.height = h * scale;
-  const ctx = canvas.getContext("2d")!;
-  ctx.fillStyle = "#0D2540";
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-  ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-  return canvas;
+// Diagram-export: az egész kártyát képként rögzíti (SVG + HTML legend + title együtt),
+// az .export-hide (export-gombok) elemek elrejtve a képfelvétel idejére.
+async function captureChart(container: HTMLElement, scale = 2): Promise<string> {
+  const hidden = Array.from(container.querySelectorAll<HTMLElement>(".export-hide"));
+  const prev = hidden.map(el => el.style.visibility);
+  hidden.forEach(el => { el.style.visibility = "hidden"; });
+  try {
+    return await toPng(container, {
+      pixelRatio: scale,
+      backgroundColor: "#0D2540",
+      cacheBust: true,
+      // recharts a defs-be kerülő SVG-elemekhez kap style-t ami CORS-mentes, tehát nincs foreignObject
+    });
+  } finally {
+    hidden.forEach((el, i) => { el.style.visibility = prev[i]; });
+  }
 }
 
 export async function exportChartToPng(container: HTMLElement, filename: string) {
-  const svg = container.querySelector("svg") as SVGElement | null;
-  if (!svg) { alert("Nem található diagram."); return; }
-  const canvas = await svgToCanvas(svg, 2);
-  const a = document.createElement("a");
-  a.href = canvas.toDataURL("image/png");
-  a.download = filename;
-  a.click();
+  try {
+    const dataUrl = await captureChart(container, 2);
+    const a = document.createElement("a");
+    a.href = dataUrl;
+    a.download = filename;
+    a.click();
+  } catch (e) {
+    console.error("PNG-export hiba:", e);
+    alert("Nem sikerült exportálni PNG-be: " + (e as Error).message);
+  }
 }
 
 export async function exportChartToPdf(container: HTMLElement, filename: string, title: string) {
-  const svg = container.querySelector("svg") as SVGElement | null;
-  if (!svg) { alert("Nem található diagram."); return; }
-  const canvas = await svgToCanvas(svg, 2);
-  const dataUrl = canvas.toDataURL("image/png");
-  const doc = new jsPDF({ orientation: "landscape", unit: "mm", format: "a4" });
-  doc.setFontSize(14);
-  doc.text(title, 14, 15);
-  // A4-landscape: 297 x 210 mm. Belső hely: 280 x 180 mm (fejléc alatt)
-  const maxW = 270, maxH = 170;
-  const ratio = canvas.width / canvas.height;
-  let w = maxW, h = maxW / ratio;
-  if (h > maxH) { h = maxH; w = maxH * ratio; }
-  doc.addImage(dataUrl, "PNG", (297 - w) / 2, 25, w, h);
-  doc.save(filename);
+  try {
+    const dataUrl = await captureChart(container, 2);
+    // Kép-méretek megállapítása a betöltött képből
+    const img = new Image();
+    await new Promise<void>((res, rej) => { img.onload = () => res(); img.onerror = () => rej(new Error("PDF-kép betöltés hiba")); img.src = dataUrl; });
+    const doc = new jsPDF({ orientation: "landscape", unit: "mm", format: "a4" });
+    doc.setFontSize(14);
+    doc.text(title, 14, 15);
+    const maxW = 270, maxH = 170;
+    const ratio = img.width / img.height;
+    let w = maxW, h = maxW / ratio;
+    if (h > maxH) { h = maxH; w = maxH * ratio; }
+    doc.addImage(dataUrl, "PNG", (297 - w) / 2, 25, w, h);
+    doc.save(filename);
+  } catch (e) {
+    console.error("PDF-export hiba:", e);
+    alert("Nem sikerült exportálni PDF-be: " + (e as Error).message);
+  }
 }

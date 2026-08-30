@@ -7,7 +7,7 @@ type Props =
 
 export function ExportGombok(props: Props) {
   return (
-    <div className="inline-flex items-center gap-1 shrink-0">
+    <div className="inline-flex items-center gap-1 shrink-0 export-hide">
       {props.kind === "table" ? (
         <>
           <button onClick={props.onXlsx} title="Letöltés Excel-fájlba (XLSX)"
