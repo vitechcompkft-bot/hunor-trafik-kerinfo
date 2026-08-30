@@ -102,7 +102,7 @@ export default function Home() {
               Napi forgalom — {napiKulcs}
             </h2>
             <NapiTabla sorok={napiSorok} />
-            <ForgTrend data={data} />
+            <ForgTrend data={data} valasztottNap={napiKulcs} />
           </>
         )}
 
