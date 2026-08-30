@@ -3,8 +3,9 @@ import { LineChart, Line, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer, Ca
 import type { TrafikData } from "@/lib/types";
 
 export function ForgTrend({ data }: { data: TrafikData }) {
-  // Utolsó 30 nap napi össz-forgalma
-  const utNapok = [...data.napok].sort().slice(-30);
+  // Csak a mai előtti napok (Z-zárt), utolsó 30
+  const ma = new Date().toISOString().slice(0, 10);
+  const utNapok = [...data.napok].filter(n => n < ma).sort().slice(-30);
   const chartData = utNapok.map(nap => {
     const sorok = data.napi[nap] || [];
     const ossz = sorok.reduce((s, r) => s + r.forgalom, 0);
