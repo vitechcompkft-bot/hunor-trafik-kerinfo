@@ -1,5 +1,5 @@
-# Napi auto-update: build-data.js + git commit/push, ha van változás
-# Fut: Windows Task Scheduler, naponta 04:30 magyar időben
+# Napi auto-update: build-data.js + git commit/push, ha van valtozas
+# Fut: Windows Task Scheduler, naponta 04:30 magyar idoben
 
 $ErrorActionPreference = "Stop"
 $repoRoot = "C:\Projects\hunor-trafik-kerinfo"
@@ -22,7 +22,6 @@ try {
 
   Log "git add + commit + push..."
   & git add public/data/trafik.json 2>&1 | Out-Null
-  # Csak akkor commit ha tényleg van változás
   & git diff --cached --quiet
   if ($LASTEXITCODE -ne 0) {
     $today = Get-Date -Format "yyyy-MM-dd"
@@ -30,9 +29,9 @@ try {
     & git push origin main 2>&1 | Tee-Object -FilePath $log -Append | Out-Null
     Log "OK: pushed"
   } else {
-    Log "Nincs változás — nincs commit"
+    Log "Nincs valtozas - nincs commit"
   }
-  Log "===== Kész ====="
+  Log "===== Kesz ====="
 } catch {
   Log ("HIBA: " + $_.Exception.Message)
   exit 1

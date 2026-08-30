@@ -1,11 +1,11 @@
-# Windows Task Scheduler regisztráció — napi 04:30 magyar időben
-# Futtasd egyszer, admin PowerShell-ből:
+# Windows Task Scheduler regisztracio - napi 04:30 magyar idoben
+# Futtasd egyszer, admin PowerShell-bol:
 #   powershell -ExecutionPolicy Bypass -File C:\Projects\hunor-trafik-kerinfo\scripts\install-daily-task.ps1
 
 $taskName = "HUNOR-Trafik-DailyUpdate"
 $script   = "C:\Projects\hunor-trafik-kerinfo\scripts\daily-auto-update.ps1"
 
-if (-not (Test-Path $script)) { throw "Nem található: $script" }
+if (-not (Test-Path $script)) { throw "Nem talalhato: $script" }
 
 $action  = New-ScheduledTaskAction -Execute "powershell.exe" `
   -Argument "-NoProfile -ExecutionPolicy Bypass -File `"$script`""
@@ -17,15 +17,14 @@ $settings = New-ScheduledTaskSettingsSet `
 $principal = New-ScheduledTaskPrincipal -UserId "$env:USERDOMAIN\$env:USERNAME" `
   -LogonType Interactive -RunLevel Highest
 
-# Ha már létezik, töröljük
 try { Unregister-ScheduledTask -TaskName $taskName -Confirm:$false -ErrorAction Stop } catch {}
 
 Register-ScheduledTask -TaskName $taskName -Action $action -Trigger $trigger `
   -Settings $settings -Principal $principal `
-  -Description "Napi trafik-adatfrissítés + git push (04:30 magyar időben)"
+  -Description "Napi trafik-adatfrissites + git push (04:30 magyar idoben)"
 
-Write-Host "OK: '$taskName' regisztrálva. Napi 04:30-kor fut."
-Write-Host "Naplók: $env:LOCALAPPDATA\hunor-trafik-kerinfo-logs\"
+Write-Host "OK: '$taskName' regisztralva. Napi 04:30-kor fut."
+Write-Host "Naplok: $env:LOCALAPPDATA\hunor-trafik-kerinfo-logs\"
 Write-Host ""
-Write-Host "Kézi próba most:"
+Write-Host "Kezi proba most:"
 Write-Host "  Start-ScheduledTask -TaskName '$taskName'"
