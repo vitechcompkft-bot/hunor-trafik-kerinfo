@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-01T17:08:40.326Z",
+  "generated_at": "2026-09-01T17:14:53.250Z",
   "utolso_napi": "2026-08-31",
   "napok": [
     "2026-08-31",
@@ -92,8 +92,8 @@
       {
         "bolt": "119",
         "nev": "119",
-        "forgalom": 0,
-        "vevoszam": 0,
+        "forgalom": 422315,
+        "vevoszam": 149,
         "arres_ne": 0,
         "arres_sz": 0,
         "keszlet_br": 0,
