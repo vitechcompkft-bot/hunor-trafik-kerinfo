@@ -1,7 +1,8 @@
 {
-  "generated_at": "2026-10-31T21:00:02.531Z",
-  "utolso_napi": "2026-10-31",
+  "generated_at": "2026-11-01T21:00:02.602Z",
+  "utolso_napi": "2026-11-01",
   "napok": [
+    "2026-11-01",
     "2026-10-31",
     "2026-10-30",
     "2026-10-29",
@@ -61,10 +62,10 @@
     "2026-09-05",
     "2026-09-04",
     "2026-09-03",
-    "2026-09-02",
-    "2026-09-01"
+    "2026-09-02"
   ],
   "havi_kulcsok": [
+    "2026-11",
     "2026-10",
     "2026-09",
     "2026-08",
@@ -87,10 +88,245 @@
     "2025-03",
     "2025-02",
     "2025-01",
-    "2024-12",
-    "2024-11"
+    "2024-12"
   ],
   "napi": {
+    "2026-11-01": [
+      {
+        "bolt": "119",
+        "nev": "119",
+        "forgalom": 0,
+        "vevoszam": 0,
+        "arres_ne": 0,
+        "arres_sz": 0,
+        "keszlet_br": 0,
+        "leertekeles": 0,
+        "leiras_br": 0,
+        "emozg_br": 0,
+        "arres_veszteseg": 0
+      },
+      {
+        "bolt": "550",
+        "nev": "550",
+        "forgalom": 0,
+        "vevoszam": 0,
+        "arres_ne": 0,
+        "arres_sz": 0,
+        "keszlet_br": 0,
+        "leertekeles": 0,
+        "leiras_br": 0,
+        "emozg_br": 0,
+        "arres_veszteseg": 0
+      },
+      {
+        "bolt": "008",
+        "nev": "8",
+        "forgalom": 1830081,
+        "vevoszam": 499,
+        "arres_ne": 261970,
+        "arres_sz": 14.62,
+        "keszlet_br": 91391498,
+        "leertekeles": 0,
+        "leiras_br": 0,
+        "emozg_br": 0,
+        "arres_veszteseg": 0
+      },
+      {
+        "bolt": "010",
+        "nev": "10",
+        "forgalom": 0,
+        "vevoszam": 0,
+        "arres_ne": 0,
+        "arres_sz": 0,
+        "keszlet_br": 0,
+        "leertekeles": 0,
+        "leiras_br": 0,
+        "emozg_br": 0,
+        "arres_veszteseg": 0
+      },
+      {
+        "bolt": "011",
+        "nev": "11",
+        "forgalom": 0,
+        "vevoszam": 0,
+        "arres_ne": 0,
+        "arres_sz": 0,
+        "keszlet_br": 0,
+        "leertekeles": 0,
+        "leiras_br": 0,
+        "emozg_br": 0,
+        "arres_veszteseg": 0
+      },
+      {
+        "bolt": "013",
+        "nev": "13",
+        "forgalom": 0,
+        "vevoszam": 0,
+        "arres_ne": 0,
+        "arres_sz": 0,
+        "keszlet_br": 0,
+        "leertekeles": 0,
+        "leiras_br": 0,
+        "emozg_br": 0,
+        "arres_veszteseg": 0
+      },
+      {
+        "bolt": "021",
+        "nev": "21",
+        "forgalom": 0,
+        "vevoszam": 0,
+        "arres_ne": 0,
+        "arres_sz": 0,
+        "keszlet_br": 0,
+        "leertekeles": 0,
+        "leiras_br": 0,
+        "emozg_br": 0,
+        "arres_veszteseg": 0
+      },
+      {
+        "bolt": "026",
+        "nev": "26",
+        "forgalom": 0,
+        "vevoszam": 0,
+        "arres_ne": 0,
+        "arres_sz": 0,
+        "keszlet_br": 0,
+        "leertekeles": 0,
+        "leiras_br": 0,
+        "emozg_br": 0,
+        "arres_veszteseg": 0
+      },
+      {
+        "bolt": "030",
+        "nev": "30",
+        "forgalom": 0,
+        "vevoszam": 0,
+        "arres_ne": 0,
+        "arres_sz": 0,
+        "keszlet_br": 0,
+        "leertekeles": 0,
+        "leiras_br": 0,
+        "emozg_br": 0,
+        "arres_veszteseg": 0
+      },
+      {
+        "bolt": "031",
+        "nev": "31",
+        "forgalom": 1056050,
+        "vevoszam": 304,
+        "arres_ne": 147312,
+        "arres_sz": 15.81,
+        "keszlet_br": 86432042,
+        "leertekeles": 0,
+        "leiras_br": 0,
+        "emozg_br": -103563,
+        "arres_veszteseg": -9.8066379432792
+      },
+      {
+        "bolt": "032",
+        "nev": "32",
+        "forgalom": 0,
+        "vevoszam": 0,
+        "arres_ne": 0,
+        "arres_sz": 0,
+        "keszlet_br": 0,
+        "leertekeles": 0,
+        "leiras_br": 0,
+        "emozg_br": 0,
+        "arres_veszteseg": 0
+      },
+      {
+        "bolt": "040",
+        "nev": "40",
+        "forgalom": 0,
+        "vevoszam": 0,
+        "arres_ne": 0,
+        "arres_sz": 0,
+        "keszlet_br": 0,
+        "leertekeles": 0,
+        "leiras_br": 0,
+        "emozg_br": 0,
+        "arres_veszteseg": 0
+      },
+      {
+        "bolt": "047",
+        "nev": "47",
+        "forgalom": 0,
+        "vevoszam": 0,
+        "arres_ne": 0,
+        "arres_sz": 0,
+        "keszlet_br": 0,
+        "leertekeles": 0,
+        "leiras_br": 0,
+        "emozg_br": 0,
+        "arres_veszteseg": 0
+      },
+      {
+        "bolt": "050",
+        "nev": "50",
+        "forgalom": 0,
+        "vevoszam": 0,
+        "arres_ne": 0,
+        "arres_sz": 0,
+        "keszlet_br": 0,
+        "leertekeles": 0,
+        "leiras_br": 0,
+        "emozg_br": 0,
+        "arres_veszteseg": 0
+      },
+      {
+        "bolt": "055",
+        "nev": "55",
+        "forgalom": 0,
+        "vevoszam": 0,
+        "arres_ne": 0,
+        "arres_sz": 0,
+        "keszlet_br": 0,
+        "leertekeles": 0,
+        "leiras_br": 0,
+        "emozg_br": 0,
+        "arres_veszteseg": 0
+      },
+      {
+        "bolt": "057",
+        "nev": "57",
+        "forgalom": 0,
+        "vevoszam": 0,
+        "arres_ne": 0,
+        "arres_sz": 0,
+        "keszlet_br": 0,
+        "leertekeles": 0,
+        "leiras_br": 0,
+        "emozg_br": 0,
+        "arres_veszteseg": 0
+      },
+      {
+        "bolt": "060",
+        "nev": "60",
+        "forgalom": 0,
+        "vevoszam": 0,
+        "arres_ne": 0,
+        "arres_sz": 0,
+        "keszlet_br": 0,
+        "leertekeles": 0,
+        "leiras_br": 0,
+        "emozg_br": 0,
+        "arres_veszteseg": 0
+      },
+      {
+        "bolt": "070",
+        "nev": "70",
+        "forgalom": 0,
+        "vevoszam": 0,
+        "arres_ne": 0,
+        "arres_sz": 0,
+        "keszlet_br": 0,
+        "leertekeles": 0,
+        "leiras_br": 0,
+        "emozg_br": 0,
+        "arres_veszteseg": 0
+      }
+    ],
     "2026-10-31": [
       {
         "bolt": "119",
@@ -14250,245 +14486,41 @@
         "emozg_br": 1237,
         "arres_veszteseg": -0.12288893304192332
       }
-    ],
-    "2026-09-01": [
-      {
-        "bolt": "119",
-        "nev": "119",
-        "forgalom": 348235,
-        "vevoszam": 123,
-        "arres_ne": 0,
-        "arres_sz": 0,
-        "keszlet_br": 0,
-        "leertekeles": 0,
-        "leiras_br": 0,
-        "emozg_br": 0,
-        "arres_veszteseg": 0
-      },
-      {
-        "bolt": "550",
-        "nev": "550",
-        "forgalom": 318387,
-        "vevoszam": 83,
-        "arres_ne": 42269,
-        "arres_sz": 13.59,
-        "keszlet_br": 17619240,
-        "leertekeles": 0,
-        "leiras_br": 0,
-        "emozg_br": 51266,
-        "arres_veszteseg": -16.101788075518158
-      },
+    ]
+  },
+  "havi": {
+    "2026-11": [
       {
         "bolt": "008",
         "nev": "8",
-        "forgalom": 1036995,
-        "vevoszam": 289,
-        "arres_ne": 132213,
-        "arres_sz": 12.94,
-        "keszlet_br": 54370799,
+        "forgalom": 1830081,
+        "forgalom_bazis": 29481523,
+        "vevoszam": 499,
+        "vevoszam_bazis": 8838,
+        "keszlet": 91391498,
+        "keszlet_bazis": 63420602,
+        "arres": 258992,
+        "arres_szint": 14.62,
         "leertekeles": 0,
         "leiras_br": 0,
-        "emozg_br": 501332,
-        "arres_veszteseg": -48.34468825789903
-      },
-      {
-        "bolt": "010",
-        "nev": "10",
-        "forgalom": 699004,
-        "vevoszam": 200,
-        "arres_ne": 100463,
-        "arres_sz": 14.74,
-        "keszlet_br": 20331743,
-        "leertekeles": 0,
-        "leiras_br": 0,
-        "emozg_br": 128000,
-        "arres_veszteseg": -18.311769317486025
-      },
-      {
-        "bolt": "011",
-        "nev": "11",
-        "forgalom": 824325,
-        "vevoszam": 218,
-        "arres_ne": 97607,
-        "arres_sz": 12.1,
-        "keszlet_br": 32115198,
-        "leertekeles": 0,
-        "leiras_br": 0,
-        "emozg_br": 52000,
-        "arres_veszteseg": -6.308191550662663
-      },
-      {
-        "bolt": "013",
-        "nev": "13",
-        "forgalom": 592184,
-        "vevoszam": 144,
-        "arres_ne": 73628,
-        "arres_sz": 12.83,
-        "keszlet_br": 16624840,
-        "leertekeles": 0,
-        "leiras_br": 0,
-        "emozg_br": 21004,
-        "arres_veszteseg": -3.546870567256123
-      },
-      {
-        "bolt": "021",
-        "nev": "21",
-        "forgalom": 505190,
-        "vevoszam": 167,
-        "arres_ne": 66709,
-        "arres_sz": 13.53,
-        "keszlet_br": 23376332,
-        "leertekeles": 0,
-        "leiras_br": 0,
-        "emozg_br": 64000,
-        "arres_veszteseg": -12.668500960034839
-      },
-      {
-        "bolt": "026",
-        "nev": "26",
-        "forgalom": 289719,
-        "vevoszam": 75,
-        "arres_ne": 38731,
-        "arres_sz": 13.42,
-        "keszlet_br": 12178971,
-        "leertekeles": 0,
-        "leiras_br": 0,
-        "emozg_br": 32000,
-        "arres_veszteseg": -11.045185162174382
-      },
-      {
-        "bolt": "030",
-        "nev": "30",
-        "forgalom": 443688,
-        "vevoszam": 154,
-        "arres_ne": 61989,
-        "arres_sz": 14.15,
-        "keszlet_br": 25156263,
-        "leertekeles": 0,
-        "leiras_br": 0,
-        "emozg_br": 80000,
-        "arres_veszteseg": -18.03068823136979
+        "emozg_br": 0
       },
       {
         "bolt": "031",
         "nev": "31",
-        "forgalom": 1078779,
-        "vevoszam": 331,
-        "arres_ne": 139917,
-        "arres_sz": 13.24,
-        "keszlet_br": 53324830,
+        "forgalom": 1056050,
+        "forgalom_bazis": 33691257,
+        "vevoszam": 304,
+        "vevoszam_bazis": 9258,
+        "keszlet": 86432042,
+        "keszlet_bazis": 50979813,
+        "arres": 157730,
+        "arres_szint": 15.81,
         "leertekeles": 0,
         "leiras_br": 0,
-        "emozg_br": 538354,
-        "arres_veszteseg": -49.90401185043461
-      },
-      {
-        "bolt": "032",
-        "nev": "32",
-        "forgalom": 203481,
-        "vevoszam": 42,
-        "arres_ne": 27573,
-        "arres_sz": 13.66,
-        "keszlet_br": 9785658,
-        "leertekeles": 0,
-        "leiras_br": 0,
-        "emozg_br": 40000,
-        "arres_veszteseg": -19.65785503314806
-      },
-      {
-        "bolt": "040",
-        "nev": "40",
-        "forgalom": 140302,
-        "vevoszam": 46,
-        "arres_ne": 18027,
-        "arres_sz": 13.03,
-        "keszlet_br": 11597995,
-        "leertekeles": 0,
-        "leiras_br": 0,
-        "emozg_br": 96000,
-        "arres_veszteseg": -68.42382859830937
-      },
-      {
-        "bolt": "047",
-        "nev": "47",
-        "forgalom": 1175352,
-        "vevoszam": 373,
-        "arres_ne": 146736,
-        "arres_sz": 12.94,
-        "keszlet_br": 34552162,
-        "leertekeles": 0,
-        "leiras_br": 0,
-        "emozg_br": 60000,
-        "arres_veszteseg": -5.104853694893104
-      },
-      {
-        "bolt": "050",
-        "nev": "50",
-        "forgalom": 650161,
-        "vevoszam": 262,
-        "arres_ne": 96494,
-        "arres_sz": 15.34,
-        "keszlet_br": 23717710,
-        "leertekeles": 0,
-        "leiras_br": 0,
-        "emozg_br": 72061,
-        "arres_veszteseg": -11.083562379164546
-      },
-      {
-        "bolt": "055",
-        "nev": "55",
-        "forgalom": 617520,
-        "vevoszam": 140,
-        "arres_ne": 76897,
-        "arres_sz": 12.62,
-        "keszlet_br": 19848349,
-        "leertekeles": 0,
-        "leiras_br": 0,
-        "emozg_br": 80000,
-        "arres_veszteseg": -12.955045990413266
-      },
-      {
-        "bolt": "057",
-        "nev": "57",
-        "forgalom": 1135251,
-        "vevoszam": 337,
-        "arres_ne": 145898,
-        "arres_sz": 13.22,
-        "keszlet_br": 53240620,
-        "leertekeles": 0,
-        "leiras_br": 0,
-        "emozg_br": 80000,
-        "arres_veszteseg": -7.046899760493494
-      },
-      {
-        "bolt": "060",
-        "nev": "60",
-        "forgalom": 467146,
-        "vevoszam": 105,
-        "arres_ne": 59201,
-        "arres_sz": 12.9,
-        "keszlet_br": 24188548,
-        "leertekeles": 0,
-        "leiras_br": 0,
-        "emozg_br": 60000,
-        "arres_veszteseg": -12.843950285349761
-      },
-      {
-        "bolt": "070",
-        "nev": "70",
-        "forgalom": 793622,
-        "vevoszam": 222,
-        "arres_ne": 106453,
-        "arres_sz": 12.45,
-        "keszlet_br": 24580522,
-        "leertekeles": 0,
-        "leiras_br": 0,
-        "emozg_br": -34110,
-        "arres_veszteseg": -4.298015932018013
+        "emozg_br": -103563
       }
-    ]
-  },
-  "havi": {
+    ],
     "2026-10": [
       {
         "bolt": "008",
@@ -14752,7 +14784,7 @@
         "forgalom_bazis": 0,
         "vevoszam": 3373,
         "vevoszam_bazis": 0,
-        "keszlet": 19054882,
+        "keszlet": 18628934,
         "keszlet_bazis": 0,
         "arres": 1416955,
         "arres_szint": 16.037612349244075,
@@ -17555,7 +17587,7 @@
         "arres_szint": 12.413124904581572,
         "leertekeles": 0,
         "leiras_br": 0,
-        "emozg_br": 0
+        "emozg_br": 423849
       },
       {
         "bolt": "010",
@@ -17570,7 +17602,7 @@
         "arres_szint": 15.981488638864413,
         "leertekeles": 0,
         "leiras_br": 0,
-        "emozg_br": 0
+        "emozg_br": 167
       },
       {
         "bolt": "011",
@@ -17585,7 +17617,7 @@
         "arres_szint": 12.131476480314616,
         "leertekeles": 0,
         "leiras_br": 0,
-        "emozg_br": 0
+        "emozg_br": 147853
       },
       {
         "bolt": "013",
@@ -17600,7 +17632,7 @@
         "arres_szint": 11.749567285191945,
         "leertekeles": 0,
         "leiras_br": 0,
-        "emozg_br": 0
+        "emozg_br": -35018
       },
       {
         "bolt": "021",
@@ -17615,7 +17647,7 @@
         "arres_szint": 12.631782052331097,
         "leertekeles": 0,
         "leiras_br": 0,
-        "emozg_br": 0
+        "emozg_br": -3898
       },
       {
         "bolt": "026",
@@ -17630,7 +17662,7 @@
         "arres_szint": 12.98473441868758,
         "leertekeles": 0,
         "leiras_br": 0,
-        "emozg_br": 0
+        "emozg_br": 47140
       },
       {
         "bolt": "030",
@@ -17645,7 +17677,7 @@
         "arres_szint": 14.132559297001293,
         "leertekeles": 0,
         "leiras_br": 0,
-        "emozg_br": 0
+        "emozg_br": 112411
       },
       {
         "bolt": "031",
@@ -17660,7 +17692,7 @@
         "arres_szint": 12.561571357913973,
         "leertekeles": 0,
         "leiras_br": 0,
-        "emozg_br": 0
+        "emozg_br": 853618
       },
       {
         "bolt": "032",
@@ -17675,7 +17707,7 @@
         "arres_szint": 13.143354122820739,
         "leertekeles": 0,
         "leiras_br": 0,
-        "emozg_br": 0
+        "emozg_br": 49865
       },
       {
         "bolt": "040",
@@ -17690,7 +17722,7 @@
         "arres_szint": 13.033019898899875,
         "leertekeles": 0,
         "leiras_br": 0,
-        "emozg_br": 0
+        "emozg_br": 51120
       },
       {
         "bolt": "047",
@@ -17705,7 +17737,7 @@
         "arres_szint": 12.82970257105033,
         "leertekeles": 0,
         "leiras_br": 0,
-        "emozg_br": 0
+        "emozg_br": 107150
       },
       {
         "bolt": "050",
@@ -17720,7 +17752,7 @@
         "arres_szint": 14.032826905961974,
         "leertekeles": 0,
         "leiras_br": 0,
-        "emozg_br": 0
+        "emozg_br": 91221
       },
       {
         "bolt": "055",
@@ -17735,7 +17767,7 @@
         "arres_szint": 11.93157879879338,
         "leertekeles": 0,
         "leiras_br": 0,
-        "emozg_br": 0
+        "emozg_br": 52406
       },
       {
         "bolt": "057",
@@ -17750,7 +17782,7 @@
         "arres_szint": 12.48015811111857,
         "leertekeles": 0,
         "leiras_br": 0,
-        "emozg_br": 0
+        "emozg_br": 344745
       },
       {
         "bolt": "060",
@@ -17765,7 +17797,7 @@
         "arres_szint": 12.513181821686114,
         "leertekeles": 0,
         "leiras_br": 0,
-        "emozg_br": 0
+        "emozg_br": 87884
       },
       {
         "bolt": "070",
@@ -17810,7 +17842,7 @@
         "arres_szint": 13.651251738815088,
         "leertekeles": 0,
         "leiras_br": 0,
-        "emozg_br": 0
+        "emozg_br": 36553
       }
     ],
     "2025-10": [
@@ -20765,263 +20797,6 @@
         "forgalom": 7992131,
         "forgalom_bazis": 0,
         "vevoszam": 2098,
-        "vevoszam_bazis": 0,
-        "keszlet": 0,
-        "keszlet_bazis": 0,
-        "arres": 0,
-        "arres_szint": 0,
-        "leertekeles": 0,
-        "leiras_br": 0,
-        "emozg_br": 0
-      }
-    ],
-    "2024-11": [
-      {
-        "bolt": "008",
-        "nev": "8",
-        "forgalom": 33370755,
-        "forgalom_bazis": 0,
-        "vevoszam": 10781,
-        "vevoszam_bazis": 0,
-        "keszlet": 0,
-        "keszlet_bazis": 0,
-        "arres": 0,
-        "arres_szint": 0,
-        "leertekeles": 0,
-        "leiras_br": 0,
-        "emozg_br": 0
-      },
-      {
-        "bolt": "010",
-        "nev": "10",
-        "forgalom": 8213577,
-        "forgalom_bazis": 0,
-        "vevoszam": 3234,
-        "vevoszam_bazis": 0,
-        "keszlet": 0,
-        "keszlet_bazis": 0,
-        "arres": 0,
-        "arres_szint": 0,
-        "leertekeles": 0,
-        "leiras_br": 0,
-        "emozg_br": 0
-      },
-      {
-        "bolt": "011",
-        "nev": "11",
-        "forgalom": 22220937,
-        "forgalom_bazis": 0,
-        "vevoszam": 6593,
-        "vevoszam_bazis": 0,
-        "keszlet": 0,
-        "keszlet_bazis": 0,
-        "arres": 0,
-        "arres_szint": 0,
-        "leertekeles": 0,
-        "leiras_br": 0,
-        "emozg_br": 0
-      },
-      {
-        "bolt": "013",
-        "nev": "13",
-        "forgalom": 14282290,
-        "forgalom_bazis": 0,
-        "vevoszam": 3893,
-        "vevoszam_bazis": 0,
-        "keszlet": 0,
-        "keszlet_bazis": 0,
-        "arres": 0,
-        "arres_szint": 0,
-        "leertekeles": 0,
-        "leiras_br": 0,
-        "emozg_br": 0
-      },
-      {
-        "bolt": "021",
-        "nev": "21",
-        "forgalom": 16346971,
-        "forgalom_bazis": 0,
-        "vevoszam": 4379,
-        "vevoszam_bazis": 0,
-        "keszlet": 0,
-        "keszlet_bazis": 0,
-        "arres": 0,
-        "arres_szint": 0,
-        "leertekeles": 0,
-        "leiras_br": 0,
-        "emozg_br": 0
-      },
-      {
-        "bolt": "026",
-        "nev": "26",
-        "forgalom": 7001418,
-        "forgalom_bazis": 0,
-        "vevoszam": 2144,
-        "vevoszam_bazis": 0,
-        "keszlet": 0,
-        "keszlet_bazis": 0,
-        "arres": 0,
-        "arres_szint": 0,
-        "leertekeles": 0,
-        "leiras_br": 0,
-        "emozg_br": 0
-      },
-      {
-        "bolt": "030",
-        "nev": "30",
-        "forgalom": 11703327,
-        "forgalom_bazis": 0,
-        "vevoszam": 3914,
-        "vevoszam_bazis": 0,
-        "keszlet": 0,
-        "keszlet_bazis": 0,
-        "arres": 0,
-        "arres_szint": 0,
-        "leertekeles": 0,
-        "leiras_br": 0,
-        "emozg_br": 0
-      },
-      {
-        "bolt": "031",
-        "nev": "31",
-        "forgalom": 34352504,
-        "forgalom_bazis": 0,
-        "vevoszam": 9582,
-        "vevoszam_bazis": 0,
-        "keszlet": 0,
-        "keszlet_bazis": 0,
-        "arres": 0,
-        "arres_szint": 0,
-        "leertekeles": 0,
-        "leiras_br": 0,
-        "emozg_br": 0
-      },
-      {
-        "bolt": "032",
-        "nev": "32",
-        "forgalom": 3587982,
-        "forgalom_bazis": 0,
-        "vevoszam": 1110,
-        "vevoszam_bazis": 0,
-        "keszlet": 0,
-        "keszlet_bazis": 0,
-        "arres": 0,
-        "arres_szint": 0,
-        "leertekeles": 0,
-        "leiras_br": 0,
-        "emozg_br": 0
-      },
-      {
-        "bolt": "040",
-        "nev": "40",
-        "forgalom": 4826462,
-        "forgalom_bazis": 0,
-        "vevoszam": 1374,
-        "vevoszam_bazis": 0,
-        "keszlet": 0,
-        "keszlet_bazis": 0,
-        "arres": 0,
-        "arres_szint": 0,
-        "leertekeles": 0,
-        "leiras_br": 0,
-        "emozg_br": 0
-      },
-      {
-        "bolt": "047",
-        "nev": "47",
-        "forgalom": 25656535,
-        "forgalom_bazis": 0,
-        "vevoszam": 8134,
-        "vevoszam_bazis": 0,
-        "keszlet": 0,
-        "keszlet_bazis": 0,
-        "arres": 0,
-        "arres_szint": 0,
-        "leertekeles": 0,
-        "leiras_br": 0,
-        "emozg_br": 0
-      },
-      {
-        "bolt": "050",
-        "nev": "50",
-        "forgalom": 17392208,
-        "forgalom_bazis": 0,
-        "vevoszam": 6072,
-        "vevoszam_bazis": 0,
-        "keszlet": 0,
-        "keszlet_bazis": 0,
-        "arres": 0,
-        "arres_szint": 0,
-        "leertekeles": 0,
-        "leiras_br": 0,
-        "emozg_br": 0
-      },
-      {
-        "bolt": "055",
-        "nev": "55",
-        "forgalom": 12934831,
-        "forgalom_bazis": 0,
-        "vevoszam": 3425,
-        "vevoszam_bazis": 0,
-        "keszlet": 0,
-        "keszlet_bazis": 0,
-        "arres": 0,
-        "arres_szint": 0,
-        "leertekeles": 0,
-        "leiras_br": 0,
-        "emozg_br": 0
-      },
-      {
-        "bolt": "057",
-        "nev": "57",
-        "forgalom": 29085255,
-        "forgalom_bazis": 0,
-        "vevoszam": 8242,
-        "vevoszam_bazis": 0,
-        "keszlet": 0,
-        "keszlet_bazis": 0,
-        "arres": 0,
-        "arres_szint": 0,
-        "leertekeles": 0,
-        "leiras_br": 0,
-        "emozg_br": 0
-      },
-      {
-        "bolt": "060",
-        "nev": "60",
-        "forgalom": 11979927,
-        "forgalom_bazis": 0,
-        "vevoszam": 2903,
-        "vevoszam_bazis": 0,
-        "keszlet": 0,
-        "keszlet_bazis": 0,
-        "arres": 0,
-        "arres_szint": 0,
-        "leertekeles": 0,
-        "leiras_br": 0,
-        "emozg_br": 0
-      },
-      {
-        "bolt": "070",
-        "nev": "70",
-        "forgalom": 23729370,
-        "forgalom_bazis": 0,
-        "vevoszam": 6415,
-        "vevoszam_bazis": 0,
-        "keszlet": 0,
-        "keszlet_bazis": 0,
-        "arres": 0,
-        "arres_szint": 0,
-        "leertekeles": 0,
-        "leiras_br": 0,
-        "emozg_br": 0
-      },
-      {
-        "bolt": "550",
-        "nev": "550",
-        "forgalom": 7773093,
-        "forgalom_bazis": 0,
-        "vevoszam": 2282,
         "vevoszam_bazis": 0,
         "keszlet": 0,
         "keszlet_bazis": 0,
